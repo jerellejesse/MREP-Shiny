@@ -6,9 +6,9 @@ library(wham)
 ###################
 #### Base Case ####
 ###################
-setwd(here("WHAM_runs/Base"))
+
 # pull saved data input from Run 4 WHAM plaice assessment
-input <- readRDS("WHAM_MT_Run4_input.rds")
+input <- readRDS(here("inputs/WHAM_MT_Run4_input.rds"))
 
 # fit model
 mod <- fit_wham(input, do.osa = F, do.retro = F, MakeADFun.silent = T)
@@ -46,12 +46,9 @@ plot(mod$years, res$reps[[1]]$SSB)
 ##################################
 #### Edit Catch Data ####
 ##################################
-setwd(here("WHAM_runs"))
 run.name <- "WHAM_MT_Run4"
 
-dat.filename <- "2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT"
-
-asap3 <- read_asap3_dat(dat.filename)
+asap3 <- read_asap3_dat(here("inputs/2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT"))
 # change catch
 catch_em <- asap3$dat$CAA_mats[[1]]*.50 #divide the whole matrix in half, not paa, but actual catchaa
 asap3$dat$CAA_mats[[1]]<- catch_em
@@ -146,15 +143,13 @@ input$data$avg_years_ind = (input$data$n_years_model-5):(input$data$n_years_mode
 
 ### Save input
 # Save model data input
-saveRDS(input, file=file.path("BiasCatch", paste(run.name, "input_bias.rds", sep='_')) )
+saveRDS(input, file=file.path("inputs", paste(run.name, "input_bias.rds", sep='_')) )
 
 #############################
 #### Bias Catch Scenario ####
 #############################
-setwd(here("WHAM_runs/BiasCatch"))
-
 #read in biased input
-input_bias <-readRDS("WHAM_MT_Run4_input_bias.rds")
+input_bias <-readRDS(here("inputs/WHAM_MT_Run4_input_bias.rds"))
 
 # fit model
 mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = F, MakeADFun.silent = T)
