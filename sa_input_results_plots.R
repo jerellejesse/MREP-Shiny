@@ -115,11 +115,11 @@ for (i in 1:cols) {
   SSB [i,] <- temp
 }
 SSB_data<-as.data.frame(SSB)%>%
-  dplyr::rename(upper=V1, SSB=V2, lower=V3)
+  dplyr::rename(SSB_upper=V1, SSB=V2, SSB_lower=V3)
 year <- 1980:2021
 
 ggplot(SSB_data)+ geom_line(aes(x=year, y= SSB), color=gmri_cols("green"), linewidth=1)#+
-  geom_ribbon(aes(x=year, ymin= lower, ymax=upper),fill=gmri_cols("green") , alpha=0.5)
+  geom_ribbon(aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)
 
 #### fishing mortality
   pull_f <- sapply(data$reps, function(x) return(x$F))%>%
@@ -137,7 +137,7 @@ for (i in 1:cols) {
 F_data<-as.data.frame(F) %>% dplyr::rename(upper=V1, F=V2, lower=V3)
 year <- 1980:2021
 
-ggplot(F_data)+ geom_line(aes(x=year, y= F), color=gmri_cols("green"), linewidth=1)#+
+ggplot(F_data)+ geom_line(aes(x=year, y= F), color=gmri_cols("green"), linewidth=1)+
   geom_ribbon( aes(x=year, ymin= lower, ymax=upper),fill=gmri_cols("green") , alpha=0.5)
   
 #### recruits
