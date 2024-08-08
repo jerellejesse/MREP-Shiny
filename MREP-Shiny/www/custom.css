@@ -1,0 +1,100 @@
+/* Custom CSS for Shiny Dashboard */
+
+/* Style for section titles */
+.section-title {
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Container for the information boxes */
+.info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Style for individual information boxes */
+.info-box {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  background-color: #f9f9f9;
+}
+
+/* Style for plot containers */
+.plot-container {
+  margin-bottom: 20px; /* Space between plots */
+}
+
+/* Style for definition boxes */
+.definition-box {
+  margin-bottom: 30px; /* Space between definition and interpretation boxes */
+  padding: 15px;
+}
+
+/* Ensure proper alignment of plots and definitions */
+.tab-content .row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.tab-content .column {
+  padding: 10px;
+}
+
+/* Style for box headers inside info-box */
+.info-box h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #34495e;
+  margin-top: 0;
+}
+
+/* Style for paragraphs inside info-box */
+.info-box p {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+/* Style for images */
+.fish-image {
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+/* Style for tabset */
+.tab-content {
+  margin-top: 15px;
+}
+
+/* Style for tab panels */
+.tab-panel {
+  margin: 15px 0;
+}
+
