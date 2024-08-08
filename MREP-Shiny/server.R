@@ -1,26 +1,23 @@
 # Server Logic
+library(here)
+library(gmRi)
+library(ggplot2)
 server <- function(input, output, session) {
-  # Sample data
-  stock_data <- data.frame(
-    Year = rep(2000:2020, each = 4),
-    Age = rep(1:4, times = 21),
-    Biomass = runif(84, 500, 2000),
-    FishingMortality = runif(84, 0.1, 0.5),
-    Recruitment = runif(84, 1000, 5000)
-  )
+  # data
+  inputs_year <- read.csv(here::here("MREP-Shiny/data/yearly_data.csv"))
   
   input_data <- reactive({
     switch(input$inputType,
-           "index" = data.frame(Year = 2000:2020, Index = runif(21, 50, 150)),
-           "catch" = data.frame(Year = 2000:2020, Catch = runif(21, 100, 500)),
-           "mortality" = data.frame(Year = 2000:2020, Mortality = runif(21, 0.1, 0.5)),
-           "maturity" = data.frame(Year = 2000:2020, Maturity = runif(21, 0.2, 0.8)),
-           "weight" = data.frame(Year = 2000:2020, Weight = runif(21, 0.5, 2)),
-           "catchability" = data.frame(Year = 2000:2020, Catchability = runif(21, 0.1, 0.4)),
-           "selectivity" = data.frame(Year = 2000:2020, Selectivity = runif(21, 0.2, 1))
+           "index" = data.frame(Year=inputs_year$year,Index1=inputs_year$V1, Index2=inputs_year$V2, Index3=inputs_year$V3, Index4=inputs_year$V4),
+           "catch" = data.frame(Year= inputs_year$year, Catch=inputs_year$catch),
+           "mortality" = data.frame(),
+           "maturity" = "Maturity",
+           "weight" = "Weight-at-age",
+           "catchability" = "Catchability",
+           "selectivity" = "Selectivity"
     )
   })
-  
+
   output$inputDescription <- renderUI({
     inputType <- input$inputType
     descriptions <- c(
@@ -35,36 +32,47 @@ server <- function(input, output, session) {
     p(descriptions[[inputType]])
   })
   
-  output$inputPlot <- renderPlot({
-    data <- input_data()
-    ggplot(data, aes(x = Year, y = get(names(data)[2]))) +
-      geom_line() +
-      labs(title = paste(input$inputType, "Data Over Time"),
-           x = "Year", y = names(data)[2])
-  })
+      
+    output$inputPlot <- renderPlot({
+      data <- input_data()
+      
+      p <- switch(input$inputType,
+    "index" = ggplot(data)+ geom_line(aes(x=Year, y=Index1), color=gmri_cols("green"), linewidth=1)+
+      geom_line(aes(x=Year, y=Index2), color=gmri_cols("gmri blue"), linewidth=1)+
+      geom_line(aes(x=Year, y=Index3), color=gmri_cols("orange"), linewidth=1)+
+      geom_line(aes(x=Year, y=Index4), color=gmri_cols("gmri green"), linewidth=1)+
+      ylab("Indices"),
+      
+      "catch" = ggplot(data)+ geom_col(aes(x=Year, y= Catch), width= 0.8, color=gmri_cols("green"),fill=gmri_cols("green"))#+
+      #geom_ribbon(aes(x=year, ymin= catch_lower, ymax=catch_upper),fill=gmri_cols("green") , alpha=0.5)
+      )
+      print(p)
+    })
+
   
+
   output$dataTable <- renderTable({
     input_data()
   })
   
   output$biomassPlot <- renderPlot({
-    ggplot(stock_data, aes(x = Year, y = Biomass, color = as.factor(Age))) +
-      geom_line() +
-      labs(title = "Biomass Estimates Over Time", x = "Year", y = "Biomass") +
+    ggplot(inputs_year)+ geom_line(aes(x=year, y= SSB), color=gmri_cols("green"), linewidth=1)+
+    geom_ribbon(aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)+
+      labs(title = "", x = "Year", y = "Biomass") +
       theme_minimal()
   })
   
   output$fishingMortalityPlot <- renderPlot({
-    ggplot(stock_data, aes(x = Year, y = FishingMortality, color = as.factor(Age))) +
-      geom_line() +
-      labs(title = "Fishing Mortality Rates Over Time", x = "Year", y = "Fishing Mortality") +
+    ggplot(inputs_year)+ geom_line(aes(x=year, y= F), color=gmri_cols("green"), linewidth=1)+
+      geom_ribbon( aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("green") , alpha=0.5)+
+      labs(title = "", x = "Year", y = "Fishing Mortality") +
       theme_minimal()
   })
   
   output$recruitmentPlot <- renderPlot({
-    ggplot(stock_data, aes(x = Year, y = Recruitment)) +
-      geom_line() +
-      labs(title = "Recruitment Over Time", x = "Year", y = "Recruitment") +
+    ggplot(inputs_year)+ geom_line(aes(x=year, y= R), color=gmri_cols("green"), linewidth=1)+
+      geom_ribbon(aes(x=year, ymin= R_lower, ymax=R_upper),fill=gmri_cols("green") , alpha=0.5)+
+      labs(title = "", x = "Year", y = "Recruitment") +
       theme_minimal()
   })
   
@@ -89,6 +97,9 @@ server <- function(input, output, session) {
       theme_minimal()
   })
   
+  
+  #### comparisons
+  # read in scenario data
   output$inputChangePlot1 <- renderPlot({
     ggplot(data.frame(Year = 2000:2020, Value = runif(21, 50, 150)), aes(x = Year, y = Value)) +
       geom_line() +
@@ -104,29 +115,6 @@ server <- function(input, output, session) {
       theme_minimal()
   })
   
-  output$assessmentBiomassPlot <- renderPlot({
-    ggplot(stock_data, aes(x = Year, y = Biomass)) +
-      geom_line() +
-      labs(title = "Biomass Estimates from Assessment Results", x = "Year", y = "Biomass") +
-      theme_minimal()
-  })
+
   
-  output$assessmentFishingMortalityPlot <- renderPlot({
-    ggplot(stock_data, aes(x = Year, y = FishingMortality)) +
-      geom_line() +
-      labs(title = "Fishing Mortality Rates from Assessment Results", x = "Year", y = "Fishing Mortality") +
-      theme_minimal()
-  })
-  
-  output$surveyDataTable <- renderTable({
-    data.frame(Year = 2000:2020, SurveyData = runif(21, 50, 150))
-  })
-  
-  output$surveyDataPlot <- renderPlot({
-    ggplot(data.frame(Year = 2000:2020, SurveyData = runif(21, 50, 150)),
-           aes(x = Year, y = SurveyData)) +
-      geom_line() +
-      labs(title = "Fishery Independent Survey Data", x = "Year", y = "Survey Data") +
-      theme_minimal()
-  })
 }
