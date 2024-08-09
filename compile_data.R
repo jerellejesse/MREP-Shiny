@@ -8,6 +8,9 @@ library(Rmisc)
 library(gmRi)
 
 data <- readRDS(here::here("WHAM_runs/Base/Base.rds"))
+data <- readRDS(here::here("WHAM_runs/BiasCatch/BiasCatch.rds"))
+data <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
+
 #### Index
 n_sims <- 10
 n_years <- 42
@@ -100,8 +103,17 @@ R_data$year <- 1980:2021
 #### Data by year ####
 dfs <- list(index_mean,catch_metric_data, SSB_data, F_data, R_data)
 input_year <- Reduce(function(x,y) full_join(x,y, by="year"), dfs)
+#write.csv(input_year, here::here("MREP-Shiny/data/yearly_data.csv"))
 
-write.csv(input_year, here::here("MREP-Shiny/data/yearly_data.csv"))
+# catch bias
+dfs <- list(catch_metric_data, SSB_data, F_data, R_data)
+input_catch <- Reduce(function(x,y) full_join(x,y, by="year"), dfs)
+#write.csv(input_catch, here::here("MREP-Shiny/data/catch_bias_data.csv"))
+
+# index bias
+dfs <- list(index_mean,catch_metric_data, SSB_data, F_data, R_data)
+input_index <- Reduce(function(x,y) full_join(x,y, by="year"), dfs)
+#write.csv(input_index, here::here("MREP-Shiny/data/index_bias_data.csv"))
 
 #### natural mortality
 n_sims <- 10
@@ -126,9 +138,14 @@ WAA_tidy <- gather(WAA,"Age", "Weight",1:11 )%>%
   select(!junk)%>%
   mutate(Age=fct_relevel(Age,"1","2","3","4","5","6","7","8","9","10","11"))
 
+#write.csv(WAA_tidy, here::here("MREP-Shiny/data/weight_data.csv"))
+
 #### Maturity 
 Mat <- data$inputs[[1]]$data$mature[1,]%>%
   as.data.frame()
+
+Mat<- dplyr::rename(Mat, maturity =.)
+
 Mat$Age <- 1:11   
 
 #### selectivity
@@ -136,4 +153,39 @@ Mat$Age <- 1:11
 
 #### Catchability
 
+dfs <-list(Mat, MAA_mean)
+input_age <- Reduce(function(x,y) full_join(x,y, by="Age"), dfs)
+#write.csv(input_age, here::here("MREP-Shiny/data/input_age.csv"))
 
+#### Reference points
+F40 <- list()
+for (x in 1:n_sims) {
+  F40[[x]] <- data$reps[[x]]$log_FXSPR%>%
+    exp()
+}
+F40_mean <- apply(simplify2array(F40), 1, mean)
+
+base <- F40_mean[42]
+index <- F40_mean[42]
+catch <- F40_mean[42]
+Fref <- data.frame(base, catch, index)
+
+
+SSB40 <- list()
+n_sims <- 10
+for (x in 1:n_sims) {
+  SSB40[[x]] <- data$reps[[x]]$log_SSB_FXSPR%>%
+    exp()
+}
+
+SSB40_mean <- apply(simplify2array(SSB40), 1, mean)
+
+base <-SSB40_mean[42]
+catch <- SSB40_mean[42]
+index <- SSB40_mean[42]
+SSBref <- data.frame(base, catch, index)
+
+refs <- rbind(Fref, SSBref)
+rownames(refs)<-c("Fref", "SSBref")
+
+#write.csv(refs, here::here("MREP-Shiny/data/Ref_data.csv"))
