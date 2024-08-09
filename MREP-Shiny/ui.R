@@ -5,7 +5,7 @@ library(ggplot2)
 
 # UI Definition
 ui <- dashboardPage(
-  dashboardHeader(title = "Fish Stock Dashboard"),
+  dashboardHeader(title = "Stock Assessment Dashboard"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Home", tabName = "home", icon = icon("home")),
@@ -58,13 +58,13 @@ ui <- dashboardPage(
                            div(class = "info-box",
                                h3("Select Input Type"),
                                selectInput("inputType", "Choose Input Type:",
-                                           choices = c("Index Data" = "index",
-                                                       "Catch Data" = "catch",
-                                                       "Natural Mortality Data" = "mortality",
-                                                       "Maturity Data" = "maturity",
-                                                       "Weight-at-Age Data" = "weight",
-                                                       "Catchability Data" = "catchability",
-                                                       "Selectivity Data" = "selectivity"))
+                                           choices = c("Index" = "index",
+                                                       "Catch" = "catch",
+                                                       "Natural Mortality" = "mortality",
+                                                       "Maturity" = "maturity",
+                                                       "Weight-at-Age" = "weight",
+                                                       "Catchability" = "catchability",
+                                                       "Selectivity" = "selectivity"))
                            ),
                            div(class = "info-box",
                                h3("Input Data Description"),
@@ -93,7 +93,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Biomass Estimates"),
+                                          h3("Biomass"),
                                           plotOutput("biomassPlot")
                                       )
                                   )
@@ -101,7 +101,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass Estimates: Definitions and Interpretation"),
+                                          h3("Biomass: Definitions and Interpretation"),
                                           p("Biomass estimates provide an indication of the total amount of fish in the stock. Higher biomass typically suggests a healthier stock.")
                                       )
                                   )
@@ -111,7 +111,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Fishing Mortality Rates"),
+                                          h3("Fishing Mortality Rate"),
                                           plotOutput("fishingMortalityPlot")
                                       )
                                   )
@@ -119,8 +119,8 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Fishing Mortality Rates: Definitions and Interpretation"),
-                                          p("Fishing mortality rates show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
+                                          h3("Fishing Mortality Rates Definitions and Interpretation"),
+                                          p("Fishing mortality rate show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
                                       )
                                   )
                            )
@@ -242,7 +242,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass Estimates: Definitions and Interpretation"),
+                                          h3("Biomass: Definitions and Interpretation"),
                                           p("Biomass estimates provide an indication of the total amount of fish in the stock. Higher biomass typically suggests a healthier stock.")
                                       )
                                   )
@@ -252,7 +252,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Fishing Mortality Rates"),
+                                          h3("Fishing Mortality Rate"),
                                           plotOutput("fishingMortalityPlot2")
                                       )
                                   )
@@ -260,8 +260,8 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Fishing Mortality Rates: Definitions and Interpretation"),
-                                          p("Fishing mortality rates show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
+                                          h3("Fishing Mortality Rate: Definitions and Interpretation"),
+                                          p("Fishing mortality rate show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
                                       )
                                   )
                            )
@@ -383,7 +383,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass Estimates: Definitions and Interpretation"),
+                                          h3("Biomass: Definitions and Interpretation"),
                                           p("Biomass estimates provide an indication of the total amount of fish in the stock. Higher biomass typically suggests a healthier stock.")
                                       )
                                   )
@@ -393,7 +393,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Fishing Mortality Rates"),
+                                          h3("Fishing Mortality Rate"),
                                           plotOutput("fishingMortalityPlot3")
                                       )
                                   )
@@ -401,8 +401,8 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Fishing Mortality Rates: Definitions and Interpretation"),
-                                          p("Fishing mortality rates show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
+                                          h3("Fishing Mortality Rate: Definitions and Interpretation"),
+                                          p("Fishing mortality rate show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
                                       )
                                   )
                            )
