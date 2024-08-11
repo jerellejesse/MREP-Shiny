@@ -15,8 +15,8 @@ server <- function(input, output, session) {
     switch(input$inputType,
            "index" = data.frame(Year=inputs_year$year,Index1=inputs_year$V1, Index2=inputs_year$V2, Index3=inputs_year$V3, Index4=inputs_year$V4),
            "catch" = data.frame(Year= inputs_year$year, Catch=inputs_year$catch),
-           "mortality" = data.frame(Age=input_age$Age, M=input_age$M),
-           "maturity" = data.frame(Age=input_age$Age, Maturity=input_age$maturity),
+           "mortality" = data.frame(Age=inputs_age$Age, M=inputs_age$M),
+           "maturity" = data.frame(Age=inputs_age$Age, Maturity=inputs_age$maturity),
            "weight" = data.frame(Year=weight_data$Year, Age=weight_data$Age, Weight=weight_data$Weight),
            "catchability" = "Catchability",
            "selectivity" = "Selectivity"
