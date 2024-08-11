@@ -2,14 +2,16 @@
 library(here)
 library(gmRi)
 library(ggplot2)
+library(tidyverse)
 server <- function(input, output, session) {
   # data
-  inputs_year <- read.csv(here::here("MREP-Shiny/data/yearly_data.csv"))
-  inputs_age <- read.csv(here::here("MREP-Shiny/data/input_age.csv"))
-  weight_data <- read.csv(here::here("MREP-Shiny/data/weight_data.csv"))
-  catch_bias <- read.csv(here::here("MREP-Shiny/data/catch_bias_data.csv"))
-  index_bias <- read.csv(here::here("MREP-Shiny/data/index_bias_data.csv"))
-  refs <- read.csv(here::here("MREP-Shiny/data/Ref_data.csv"))
+  inputs_year <- read.csv(here::here("data/yearly_data.csv"))
+  inputs_age <- read.csv(here::here("data/input_age.csv"))
+  weight_data <- read.csv(here::here("data/weight_data.csv"))
+  catch_bias <- read.csv(here::here("data/catch_bias_data.csv"))
+  index_bias <- read.csv(here::here("data/index_bias_data.csv"))
+  refs <- read.csv(here::here("data/Ref_data.csv"))
+  catchability <- read.csv(here::here("data/catchability.csv"))
     
   input_data <- reactive({
     switch(input$inputType,
@@ -18,21 +20,21 @@ server <- function(input, output, session) {
            "mortality" = data.frame(Age=input_age$Age, M=input_age$M),
            "maturity" = data.frame(Age=input_age$Age, Maturity=input_age$maturity),
            "weight" = data.frame(Year=weight_data$Year, Age=weight_data$Age, Weight=weight_data$Weight),
-           "catchability" = "Catchability",
-           "selectivity" = "Selectivity"
+           "selectivity" = data.frame(Age= inputs_age$Age, Selectivity= inputs_age$selectivity),
+           "catchability" = data.frame(Survey= catchability$survey, Year=catchability$Year, Catchability= catchability$catchability)
     )
   })
 
   output$inputDescription <- renderUI({
     inputType <- input$inputType
     descriptions <- c(
-      index = "Index data provides information about the relative abundance of the fish stock.",
-      catch = "Catch data shows the amount of fish removed from the stock by fishing activities.",
-      mortality = "Natural mortality data indicates the rate at which fish die due to natural causes.",
-      maturity = "Maturity data describes the proportion of the fish population that has reached reproductive age.",
-      weight = "Weight-at-age data provides information on the average weight of fish at different ages.",
-      catchability = "Catchability data reflects the probability of capturing a fish in a survey or fishery.",
-      selectivity = "Selectivity data shows how the fishing gear affects different age groups of the fish stock."
+      index = "Index data provides information about the relative abundance of the fish stock. This data comes from fishery independent surveys and monitoring. For American Plaice there are four surveys based on the Northeast Fishery Science Center trawl survey spilt bewteen different research vessels. 1. Spring Albatross (green), 2. Spring Bigelow (blue), 3. Fall Albatross (orange), 4. Fall Bigelow (yellow)",
+      catch = "Catch data shows the amount of fish removed from the stock by fishing activities. This data can be collected for commercial fisheries through dealer reports, VTRs, and logbooks. Discard data comes from oberservers on vessels. Recreational data can be collected from intercept or mail surveys. ",
+      mortality = "Natural mortality (M) data indicates the rate at which fish die due to natural causes. Natural mortality is usually a fixed number but can vary over ages or time. This data can come from tagging, relationships with life-history traits, or sometimes be estimated in the stock assessment model.",
+      maturity = "Maturity data describes the proportion of the fish population that has reached reproductive age. This data comes from fishery independent surveys that take biological information",
+      weight = "Weight-at-age data provides information on the average weight of fish at different ages. There can be different weight-at-age for fishery indpendent data and fishery dependent data",
+      catchability = "Catchability (q) data reflects the probability of capturing a fish in a survey. This can be estimated in the stock assessment model. Each index has an associated catchability. For American Plaice: Spring Albatross (blue), Spring Bigelow (green), Fall Albatross (yellow), Fall Bigelow (orange)",
+      selectivity = "Selectivity data shows how the fishing gear affects different age groups of the fish stock. This can be estimated in the stock assessment model."
     )
     p(descriptions[[inputType]])
   })
@@ -51,19 +53,27 @@ server <- function(input, output, session) {
       theme_minimal(),
       
       "catch" = ggplot(data)+ geom_col(aes(x=Year, y= Catch), width= 0.8, color=gmri_cols("green"),fill=gmri_cols("green"))+
-      #geom_ribbon(aes(x=year, ymin= catch_lower, ymax=catch_upper),fill=gmri_cols("green") , alpha=0.5)
       ylab("Catch (mt)") +
       theme_minimal(),
     
-      "mortality" = ggplot(data)+geom_line(aes(x=Age, y=M), linewidth=1.5,color=gmri_cols("green")),
+      "mortality" = ggplot(data)+geom_line(aes(x=Age, y=M), linewidth=1.5,color=gmri_cols("green"))+
+      theme_minimal(),
       
       "maturity" = ggplot(data)+geom_line(aes(x=Age, y=Maturity),color=gmri_cols("green"), linewidth=1.5)+
       labs(y= "Maturity") +
       theme_minimal(),
-        
+    
+     "selectivity" = ggplot(data)+geom_line(aes(x=Age, y=Selectivity),color=gmri_cols("green"), linewidth=1.5)+
+      labs(y= "Fishery selectivity") +
+      theme_minimal(),
+    
       "weight" = ggplot(data)+geom_line(aes(x=Year, y=Weight, color=factor(Age)), linewidth=1.5)+
       labs(y= "Weight-at-age for SSB")+
       scale_color_gmri(palette = "main", guide="none") +
+      theme_minimal(),
+    
+      "catchability" = ggplot(data)+geom_line(aes(x=Year, y=Catchability, color=factor(Survey)), linewidth=1.5)+
+      scale_color_gmri(palette = "main", guide="none")+
       theme_minimal()
       )
       print(p)
@@ -155,7 +165,7 @@ server <- function(input, output, session) {
   })
   
   output$dataTable3 <- renderTable({
-    df <- data.frame(Year=inputs_year$year, "High Index"=inputs_year$V1, "Low Index"=index_bias$V1)
+    df <- data.frame(Year=inputs_year$year, "High Index1"=inputs_year$V1, "Low Index1"=index_bias$V1)
   })
   
   output$biomassPlot2 <- renderPlot({
