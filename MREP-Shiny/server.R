@@ -55,7 +55,8 @@ server <- function(input, output, session) {
       ylab("Catch (mt)") +
       theme_minimal(),
     
-      "mortality" = ggplot(data)+geom_line(aes(x=Age, y=M), linewidth=1.5,color=gmri_cols("green")),
+      "mortality" = ggplot(data)+geom_line(aes(x=Age, y=M), linewidth=1.5,color=gmri_cols("green"))+
+      theme_minimal(),
       
       "maturity" = ggplot(data)+geom_line(aes(x=Age, y=Maturity),color=gmri_cols("green"), linewidth=1.5)+
       labs(y= "Maturity") +
