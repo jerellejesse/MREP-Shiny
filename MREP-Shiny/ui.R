@@ -6,23 +6,53 @@ library(ggplot2)
 # UI Definition
 ui <- dashboardPage(
   dashboardHeader(title = "Stock Assessment Dashboard"),
-  dashboardSidebar(
+  dashboardSidebar(width=325,
     sidebarMenu(
       menuItem("Home", tabName = "home", icon = icon("home")),
       menuItem("Stock Assessment Inputs", tabName = "inputs", icon = icon("bar-chart")),
-      menuItem("Stock Assessment Results", tabName = "results", icon = icon("file-alt")),
-      menuItem("Explore Fishery Dependent Data", tabName = "fisheryDependent", icon = icon("chart-line")),
-      menuItem("Explore Fishery Independent Data", tabName = "fisheryIndependent", icon = icon("chart-bar"))
+      menuItem("Explore the Current Assessment", tabName = "results", icon = icon("file-alt")),
+      menuItem("Explore Impacts of Changes in Catch", tabName = "fisheryDependent", icon = icon("chart-line")),
+      menuItem("Explore Impacts of Changes in Survey Indices", tabName = "fisheryIndependent", icon = icon("chart-bar"))
     )
   ),
   dashboardBody(
-    tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
     tabItems(
       tabItem(tabName = "home",
-        tabsetPanel(
-          h2("Home", class = "section-title"),
             tabsetPanel(
               id = "infoTabs",
+              tabPanel(
+                "About",
+                fluidRow(
+                  column(
+                    width = 12,
+                    div(
+                      class = "info-container",
+                      div(
+                        class = "info-box",
+                        style = "background-color: #f8f9fa; padding: 20px; border-radius: 10px;",
+                        h3("Interactive Stock Assessment Dashboard", style = "color: #00608a; font-weight: bold;"),
+                        p("This interactive stock assessment modeling tool helps users understand how different data elements and uncertainties impact stock assessment models.",
+                          style = "font-size: 16px; line-height: 1.5;"),
+                        hr(),
+                        h4("Key Questions Addressed", style = "color: #343a40; margin-top: 20px;"),
+                        p(tags$ul(
+                          tags$li("What are the inputs needed for a stock assessment? How are they used?"),
+                          tags$li("What do assessment results look like? How do we test the performance of a stock assessment?"),
+                          tags$li("How does changing inputs alter the results and performance of the assessments?")
+                        )),
+                        p("The tool uses American Plaice as an illustrative example.",
+                          style = "font-style: italic; color: #6c757d; margin-top: 20px;"),
+                        hr(),
+                        p("Explore the tool to learn more about the dynamics of stock assessments!",
+                          style = "text-align: center; font-weight: bold; margin-top: 20px;")
+                      )
+                    )
+                  )
+                )
+              )
+              ,
                tabPanel("American Plaice",
                 fluidRow(
                   column(width = 8,
@@ -51,7 +81,6 @@ ui <- dashboardPage(
               )
               )
             )
-        )
       ),
       tabItem(tabName = "inputs",
               h2("Stock Assessment Inputs", class = "section-title"),
