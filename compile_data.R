@@ -167,7 +167,7 @@ tidy_cat <- catchability %>%
   )
 tidy_cat<- separate(tidy_cat, survey,c("junk", "Survey"), sep="(?<=[A-Za-z])(?=[0-9])")%>%
   select(!junk)
-#write.csv(tidy_cat, here::here("MREp-Shiny/data/catchability.csv"))
+#write.csv(tidy_cat, here::here("MREP-Shiny/data/catchability.csv"))
 
 dfs <-list(Mat, MAA_mean, Sel)
 input_age <- Reduce(function(x,y) full_join(x,y, by="Age"), dfs)
