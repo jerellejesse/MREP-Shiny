@@ -6,13 +6,13 @@ library(ggplot2)
 # UI Definition
 ui <- dashboardPage(
   dashboardHeader(title = "Stock Assessment Dashboard"),
-  dashboardSidebar(
+  dashboardSidebar(width=325,
     sidebarMenu(
       menuItem("Home", tabName = "home", icon = icon("home")),
       menuItem("Stock Assessment Inputs", tabName = "inputs", icon = icon("bar-chart")),
-      menuItem("Stock Assessment Results", tabName = "results", icon = icon("file-alt")),
-      menuItem("Explore Fishery Dependent Data", tabName = "fisheryDependent", icon = icon("chart-line")),
-      menuItem("Explore Fishery Independent Data", tabName = "fisheryIndependent", icon = icon("chart-bar")),
+      menuItem("Explore Current Assessment", tabName = "results", icon = icon("file-alt")),
+      menuItem("Explore Impacts of Changes in Catch", tabName = "fisheryDependent", icon = icon("chart-line")),
+      menuItem("Explore Impacts of Changes in Indices", tabName = "fisheryIndependent", icon = icon("chart-bar")),
       menuItem("About", tabName = "about", icon = icon("info"))
     )
   ),
@@ -20,45 +20,73 @@ ui <- dashboardPage(
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
     tabItems(
       tabItem(tabName = "home",
-              h2("American Plaice (Hippoglossoides platessoides)", class = "section-title"),
-              fluidRow(
-                column(width = 8,
+                tabsetPanel(
+                  id = "infoTabs",
+                  tabPanel(
+                    "About",
+                    fluidRow(
+                      column(
+                        width = 12,
+                        div(
+                          class = "info-container",
+                          div(
+                            class = "info-box",
+                            style = "background-color: #f8f9fa; padding: 20px; border-radius: 10px;",
+                            h3("Interactive Stock Assessment Dashboard", style = "color: #00608a; font-weight: bold;"),
+                            p("This interactive stock assessment modeling tool helps users understand how different data elements and uncertainties impact stock assessment models.",
+                              style = "font-size: 16px; line-height: 1.5;"),
+                            hr(),
+                            h4("Key Questions Addressed", style = "color: #343a40; margin-top: 20px;"),
+                            p(tags$ul(
+                              tags$li("What are the inputs needed for a stock assessment? How are they used?"),
+                              tags$li("What do assessment results look like? How do we test the performance of a stock assessment?"),
+                              tags$li("How does changing inputs alter the results and performance of the assessments?")
+                            )),
+                            p("The tool uses American Plaice as an illustrative example.",
+                              style = "font-style: italic; color: #6c757d; margin-top: 20px;"),
+                            hr(),
+                            p("Explore the tool to learn more about the dynamics of stock assessments!",
+                              style = "text-align: center; font-weight: bold; margin-top: 20px;")
+                          )
+                        )
+                      )
+                  )
+                  ,
+                  tabPanel("American Plaice",
+                           fluidRow(
+                             column(width = 8,
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Appearance"),
-                               p("American plaice is a right-eyed flounder. They have a large mouth, rounded tail, and straight lateral line. They are reddish-brown on their eyed side and white on their underside. ")
-                           ),
-                           div(class = "info-box",
+                               p("American plaice is a right-eyed flounder. They have a large mouth, rounded tail, and straight lateral line. They are reddish-brown on their eyed side and white on their underside. "),
+                                br(),br(),
                                h3("Biology"),
-                               p("American plaice can live for more than 20 years. They feed on smaller fish and invertebrates.")
-                           ),
-                           div(class = "info-box",
+                               p("American plaice can live for more than 20 years. They feed on smaller fish and invertebrates."),
+                               br(),br(),
                                h3("Range"),
-                               p("American plaice are found in the North Atlantic Ocean, ranging from southern Labrador to Rhode Island. They are distributed throughout the Gulf of Maine and Georges Bank.")
-                           ),
-                           div(class = "info-box",
+                               p("American plaice are found in the North Atlantic Ocean, ranging from southern Labrador to Rhode Island. They are distributed throughout the Gulf of Maine and Georges Bank."),
+                               br(),br(),
                                h3("Habitat"),
-                               p("American plaice are found in waters between 130 and 980 feet deep and live on the ocean bottom in areas covered by sand, mud, or gravel.")
-                           ),
-                           div(class = "info-box",
+                               p("American plaice are found in waters between 130 and 980 feet deep and live on the ocean bottom in areas covered by sand, mud, or gravel."),
+                               br(),br(),
                                h3("Fishery"),
-                               p("American Plaice commercial landings totaled 1.5 million pounds in 2022, valued at $2.5 million. They are typically harvested using trawl nets and not commonly encounterd in the recreational fishery.")
-                           ),
-                           div(class = "info-box",
+                               p("American Plaice commercial landings totaled 1.5 million pounds in 2022, valued at $2.5 million. They are typically harvested using trawl nets and not commonly encounterd in the recreational fishery."),
+                               br(),br(),
                                h3("Management"),
-                               p("American Plaice is managed by NOAA Fisheries and the New England Fishery Management Council. Management of American plaice involves setting catch limits, minimum sizes, and time/area closures. Regular stock assessment are conducted to monitor the stock.")
-                           ),
-                           div(class = "info-box",
+                               p("American Plaice is managed by NOAA Fisheries and the New England Fishery Management Council. Management of American plaice involves setting catch limits, minimum sizes, and time/area closures. Regular stock assessment are conducted to monitor the stock."),
+                               br(),br(),
                                h3("Stock Status"),
                                p("American plaice is current not overfished and not experiencing overfishing. A rebuilding plan was put in place in 2004 and the stock was rebuilt in 2019.")
                            )
                        )
+                )
+                )
                 ),
                 column(width = 4,
                        tags$img(src = "american_plaice.jpg", height = "300px", width = "auto", alt = "American Plaice", class = "fish-image")
                 )
               )
-
+          )
       ),
       tabItem(tabName = "inputs",
               h2("Stock Assessment Inputs", class = "section-title"),
