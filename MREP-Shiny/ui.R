@@ -97,7 +97,7 @@ ui <- dashboardPage(
                            div(class = "info-box",
                                h3("Select Input Type"),
                                selectInput("inputType", "Choose Input Type:",
-                                           choices = c("Index" = "index",
+                                           choices = c("Stock Index" = "index",
                                                        "Catch" = "catch",
                                                        "Natural Mortality" = "mortality",
                                                        "Maturity" = "maturity",
@@ -106,18 +106,17 @@ ui <- dashboardPage(
                                                        "Selectivity" = "selectivity"))
                            ),
                            div(class = "info-box",
-                               h3("Input Data Description"),
                                uiOutput("inputDescription")
                            ),
                            div(class = "info-box",
-                               h3("Input Data Plot"),
+                               uiOutput("inputHeaders"),
                                plotOutput("inputPlot")
                            )
                        )
                 ),
                 column(width = 6,
                        div(class = "info-box",
-                           h3("Input Data Table"),
+                           uiOutput("inputHeaders2"),
                            tableOutput("dataTable")
                        )
                 )
@@ -132,7 +131,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Biomass"),
+                                          h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot")
                                       )
                                   )
@@ -140,7 +139,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass: Definitions and Interpretation"),
+                                          h3("Spawning Stock Biomass: Definitions and Interpretation"),
                                           p("Biomass estimates provide an indication of the total amount of fish in the stock."), 
                                           p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."), 
                                           p("For American Plaice estimates show a large decrease in the 1980s followed by a gradual increase through the last few decades.")
@@ -181,7 +180,7 @@ ui <- dashboardPage(
                                       div(class = "info-box definition-box",
                                           h3("Recruitment: Definitions and Interpretation"),
                                           p("Recruitment measures the addition of new fish to the stock."),
-                                          p("For American Plaice recrtuiment has been mostly stable throughout the time series.")
+                                          p("For American Plaice recrtuiment has been variable without a trend throughout the time series.")
                                       )
                                   )
                            )
@@ -195,7 +194,7 @@ ui <- dashboardPage(
                                           h3("Biomass Reference Points: Definitions and Interpretation"),
                                           p("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished)."),
                                           p("These include target (solid grey line) and threshold (dashed grey line) values.") ,
-                                          p("For American Plaice biomass has stayed above the threshold and above the target in more recent decades.")
+                                          p("For American Plaice biomass has stayed above the threshold (not overfished) and above the target in more recent decades.")
                                       )
                                   )
                            ),
@@ -259,7 +258,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Fishery Dependent Data Input Change"),
-                                      p("This scenario compares the regular catch (green) to catch decreased by 50% (blue) to show the impact of catch on stock assessment results.")
+                                      p("This scenario compares the reported catch (green) to catch decreased by 50% (blue) to show the impact of catch on stock assessment results.")
                                   ),
                                   div(class = "info-box",
                                       h3("Scenario Comparison Plot"),
@@ -280,7 +279,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Biomass Estimates"),
+                                          h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot2")
                                       )
                                   )
@@ -288,8 +287,9 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass: Definitions and Interpretation"),
+                                          h3("Spawning Stock Biomass: Definitions and Interpretation"),
                                           p("Biomass estimates provide an indication of the total amount of fish in the stock."),
+                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."),
                                           p("When catch is decreased by 50% the biomass estimate is also decreased by 50%")
                                       )
                                   )
@@ -408,7 +408,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Fishery Independent Data Input Change"),
-                                      p("This scenario compares the regular indices (solid lines) to indices decreased by 50% (dashed lines) to show the impact of indices on stock assessment results.")
+                                      p("This scenario compares the regular indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results.")
                                   ),
                                   div(class = "info-box",
                                       h3("Scenario Comparison Plot"),
@@ -430,7 +430,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Biomass"),
+                                          h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot3")
                                       )
                                   )
@@ -438,8 +438,9 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass: Definitions and Interpretation"),
+                                          h3("Spanwing Stock Biomass: Definitions and Interpretation"),
                                           p("Biomass estimates provide an indication of the total amount of fish in the stock."),
+                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."), 
                                           p("When indices are decreased by 50% the biomass estimate remains the same.")
                                       )
                                   )
@@ -566,7 +567,7 @@ ui <- dashboardPage(
                            ),
                            div(class = "info-box",
                                h3("Acknowledgements"),
-                               p("MREP Northeast Steering Committee"),
+                               p("MREP Greater Atlantic Steering Committee"),
                                p("Gulf of Maine Research Institute")
                            )
                        )

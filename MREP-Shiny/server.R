@@ -21,35 +21,85 @@ server <- function(input, output, session) {
            "maturity" = data.frame(Age=inputs_age$Age, Maturity=inputs_age$maturity),
            "weight" = data.frame(Year=weight_data$Year, Age=weight_data$Age, Weight=weight_data$Weight),
            "selectivity" = data.frame(Age= inputs_age$Age, Selectivity= inputs_age$selectivity),
-           "catchability" = data.frame(Survey= catchability$survey, Year=catchability$Year, Catchability= catchability$catchability)
+           "catchability" = data.frame(Survey= catchability$Survey, Year=catchability$Year, Catchability= catchability$catchability)
     )
   })
 
   output$inputDescription <- renderUI({
     inputType <- input$inputType
     descriptions <- c(
-      index = "Index data provides information about the relative abundance of the fish stock. This data comes from fishery independent surveys and monitoring. For American Plaice there are four surveys based on the Northeast Fishery Science Center trawl survey spilt bewteen different research vessels. 1. Spring Albatross (green), 2. Spring Bigelow (blue), 3. Fall Albatross (orange), 4. Fall Bigelow (yellow)",
-      catch = "Catch data shows the amount of fish removed from the stock by fishing activities. This data can be collected for commercial fisheries through dealer reports, VTRs, and logbooks. Discard data comes from oberservers on vessels. Recreational data can be collected from intercept or mail surveys. ",
-      mortality = "Natural mortality (M) data indicates the rate at which fish die due to natural causes. Natural mortality is usually a fixed number but can vary over ages or time. This data can come from tagging, relationships with life-history traits, or sometimes be estimated in the stock assessment model.",
-      maturity = "Maturity data describes the proportion of the fish population that has reached reproductive age. This data comes from fishery independent surveys that take biological information",
+      index = "An index of abundance or biomass provides information about the relative abundance or biomass of the fish stock. This data comes from fishery independent surveys and monitoring. For American Plaice there are four surveys based on the Northeast Fishery Science Center trawl survey spilt bewteen different research vessels. 1. Spring Albatross (solid green), 2. Spring Bigelow (dashed green), 3. Fall Albatross (solid blue), 4. Fall Bigelow (dashed blue)",
+      catch = "Total catch for a stock includes commercial and recreational landings and discards. Dealer reports provide a census odf commercial landings and Vessel Trip Reports provide a census of fishing effort by stock area and the two are linked to derive landings by stock area.ssels. At sea monitoring (e.g. Fisheries Observer Program) is primarily ised to estimate discarded commercial catch. Recreational data is collected through the MRIP program which uses a combination of angler intercept surveys and mail-based surveys to characterize catch. For American Plaice, catch inludes only commercial landings and discards becasue they are not encountered in the recreational fishery.",
+      mortality = "Natural mortality (M) data indicates the rate at which fish die due to natural causes. Natural mortality is usually a fixed number but can vary over ages or time. This data can come from tagging, relationships with life-history traits, or sometimes be estimated in the stock assessment model.  For American Plaice, natural mortality is assumed as 0.3 for all ages.",
+      maturity = "Maturity data describes the proportion of the fish population that has reached reproductive age. This data comes from fishery independent surveys that take biological information.",
       weight = "Weight-at-age data provides information on the average weight of fish at different ages. There can be different weight-at-age for fishery indpendent data and fishery dependent data",
-      catchability = "Catchability (q) data reflects the probability of capturing a fish in a survey. This can be estimated in the stock assessment model. Each index has an associated catchability. For American Plaice: Spring Albatross (blue), Spring Bigelow (green), Fall Albatross (yellow), Fall Bigelow (orange)",
-      selectivity = "Selectivity data shows how the fishing gear affects different age groups of the fish stock. This can be estimated in the stock assessment model."
+      catchability = "Catchability (q) data reflects the probability of capturing a fish in a survey. This can be estimated in the stock assessment model. Each index has an associated catchability. For American Plaice: Spring Albatross (solid green), Spring Bigelow (dashed green), Fall Albatross (solid blue), Fall Bigelow (dashed blue)",
+      selectivity = "Selectivity data shows how the fishing gear affects different age groups of the fish stock. This can be estimated in the stock assessment model and gear selectivity studies."
     )
+    headers <- c(
+      index = "Stock Index",
+      catch = "Catch",
+      mortality = "Natural Mortality",
+      maturity = "Maturity",
+      weight = "Weight-at-age",
+      catchability = "Catchability",
+      selectivity = "Selectivity"
+    )
+  div(
+    h3(headers[[inputType]]),
     p(descriptions[[inputType]])
+    )
   })
   
-      
+  output$inputHeaders <- renderUI({
+    inputType <- input$inputType
+    headers <- c(
+      index = "Stock Index Input Data",
+      catch = "Catch Input Data",
+      mortality = "Natural Mortality Input Data",
+      maturity = "Maturity Input Data",
+      weight = "Weight-at-age Input Data",
+      catchability = "Catchability Input Data",
+      selectivity = "Selectivity Input Data"
+    )
+    h3(headers[[inputType]])
+    
+  })
+  
+  output$inputHeaders2 <- renderUI({
+    inputType <- input$inputType
+    headers <- c(
+      index = "Stock Index Input Data",
+      catch = "Catch Input Data",
+      mortality = "Natural Mortality Input Data",
+      maturity = "Maturity Input Data",
+      weight = "Weight-at-age Input Data",
+      catchability = "Catchability Input Data",
+      selectivity = "Selectivity Input Data"
+    )
+    h3(headers[[inputType]])
+    
+  })
+  custom_colors <- c("1" = "#38431d", 
+                     "2" = "#38431d",  
+                     "3" = "#00608a",
+                     "4"= "#00608a")  
+  
+  custom_linetypes <- c("1" = "solid",
+                        "2" = "dashed",
+                        "3" = "solid",
+                        "4"= "dashed")
+  
     output$inputPlot <- renderPlot({
       data <- input_data()
       
       p <- switch(input$inputType,
     "index" = ggplot(data)+ geom_line(aes(x=Year, y=Index1), color=gmri_cols("green"), linewidth=1)+
-      geom_line(aes(x=Year, y=Index2), color=gmri_cols("gmri blue"), linewidth=1)+
-      geom_line(aes(x=Year, y=Index3), color=gmri_cols("orange"), linewidth=1)+
-      geom_line(aes(x=Year, y=Index4), color=gmri_cols("gmri green"), linewidth=1)+
+      geom_line(aes(x=Year, y=Index2), color=gmri_cols("green"), linewidth=1, linetype="dashed")+
+      geom_line(aes(x=Year, y=Index3), color=gmri_cols("gmri blue"), linewidth=1)+
+      geom_line(aes(x=Year, y=Index4), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
       expand_limits(y = 0)+
-      ylab("Indices (kg/tow)") +
+      ylab("Stock Indices (kg/tow)") +
       theme_minimal(),
       
       "catch" = ggplot(data)+ geom_col(aes(x=Year, y= Catch), width= 0.8, color=gmri_cols("green"),fill=gmri_cols("green"))+
@@ -72,9 +122,11 @@ server <- function(input, output, session) {
       scale_color_gmri(palette = "main", guide="none") +
       theme_minimal(),
     
-      "catchability" = ggplot(data)+geom_line(aes(x=Year, y=Catchability, color=factor(Survey)), linewidth=1.5)+
-      scale_color_gmri(palette = "main", guide="none")+
-      theme_minimal()
+      "catchability" = ggplot(data)+geom_line(aes(x=Year, y=Catchability, color=factor(Survey), linetype=factor(Survey)), linewidth=1.5)+
+      scale_color_manual(values = custom_colors, guide="none") +
+      scale_linetype_manual(values = custom_linetypes, guide="none") +
+      theme_minimal() +
+      labs(color = "Survey", linetype = "Survey")
       )
       print(p)
     })
@@ -89,7 +141,7 @@ server <- function(input, output, session) {
     ggplot(inputs_year)+ geom_line(aes(x=year, y= SSB), color=gmri_cols("green"), linewidth=1)+
     geom_ribbon(aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)+
       expand_limits(y = 0)+
-      labs(title = "", x = "Year", y = "Biomass (mt)") +
+      labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)") +
       theme_minimal()
   })
   
@@ -148,12 +200,12 @@ server <- function(input, output, session) {
   output$comparisonPlot2 <- renderPlot({
     ggplot() +
       geom_line(data = inputs_year, aes(x = year, y = V1), color = gmri_cols("green"), linewidth = 1) +
-      geom_line(data = inputs_year, aes(x = year, y = V2), color = gmri_cols("gmri blue"), linewidth = 1) +
-      geom_line(data = inputs_year, aes(x = year, y = V3), color = gmri_cols("orange"), linewidth = 1) +
-      geom_line(data = inputs_year, aes(x = year, y = V4), color = gmri_cols("gmri green"), linewidth = 1) +
-      geom_line(data = index_bias, aes(x = year, y = V1), color = gmri_cols("green"), linewidth = 1, linetype = "dashed") +
-      geom_line(data = index_bias, aes(x = year, y = V2), color = gmri_cols("gmri blue"), linewidth = 1, linetype = "dashed") +
-      geom_line(data = index_bias, aes(x = year, y = V3), color = gmri_cols("orange"), linewidth = 1, linetype = "dashed") +
+      geom_line(data = inputs_year, aes(x = year, y = V2), color = gmri_cols("green"), linewidth = 1, linetype="dashed") +
+      geom_line(data = inputs_year, aes(x = year, y = V3), color = gmri_cols("gmri blue"), linewidth = 1) +
+      geom_line(data = inputs_year, aes(x = year, y = V4), color = gmri_cols("gmri blue"), linewidth = 1, linetype="dashed") +
+      geom_line(data = index_bias, aes(x = year, y = V1), color = gmri_cols("orange"), linewidth = 1) +
+      geom_line(data = index_bias, aes(x = year, y = V2), color = gmri_cols("orange"), linewidth = 1, linetype = "dashed") +
+      geom_line(data = index_bias, aes(x = year, y = V3), color = gmri_cols("gmri green"), linewidth = 1) +
       geom_line(data = index_bias, aes(x = year, y = V4), color = gmri_cols("gmri green"), linewidth = 1, linetype = "dashed") +
       expand_limits(y = 0) +
       labs( y = "Indices (kg/tow)", x = "Year") +
@@ -174,7 +226,7 @@ server <- function(input, output, session) {
       geom_line(data=catch_bias, aes(x=year, y= SSB), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
       geom_ribbon(data=catch_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Biomass (mt)") +
+      labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)") +
       theme_minimal()
   })
   
@@ -204,7 +256,7 @@ server <- function(input, output, session) {
       geom_line(data=index_bias, aes(x=year, y= SSB), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
       geom_ribbon(data=index_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Biomass (mt)") +
+      labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)") +
       theme_minimal()
   })
   output$fishingMortalityPlot3 <- renderPlot({
