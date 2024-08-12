@@ -19,29 +19,29 @@ ui <- dashboardPage(
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
     tabItems(
       tabItem(tabName = "home",
-              h2("American Plaice (Hippoglossoides platessoides)", class = "section-title"),
-              fluidRow(
-                column(width = 8,
+        tabsetPanel(
+          h2("Home", class = "section-title"),
+            tabsetPanel(
+              id = "infoTabs",
+               tabPanel("American Plaice",
+                fluidRow(
+                  column(width = 8,
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Appearance"),
-                               p("American plaice has a diamond-shaped body with a pale, light brown color, often with darker spots. The eyes are located on the right side of the body, and the fish has both dorsal and anal fins that extend along the length of the body.")
-                           ),
-                           div(class = "info-box",
+                               p("American plaice has a diamond-shaped body with a pale, light brown color, often with darker spots. The eyes are located on the right side of the body, and the fish has both dorsal and anal fins that extend along the length of the body."),
+                               br(),br(),
                                h3("Biology"),
-                               p("American plaice is a demersal fish that lives on the seafloor. It feeds on smaller fish and invertebrates. The species has a lifespan of up to 20 years and reaches sexual maturity at around 3-4 years of age.")
-                           ),
-                           div(class = "info-box",
+                               p("American plaice is a demersal fish that lives on the seafloor. It feeds on smaller fish and invertebrates. The species has a lifespan of up to 20 years and reaches sexual maturity at around 3-4 years of age."),
+                               br(),br(),
                                h3("Range"),
-                               p("American plaice is found in the North Atlantic Ocean, from the eastern coast of North America to the waters off Greenland and Iceland. It is commonly found in shallow, coastal waters and deeper offshore areas.")
-                           ),
-                           div(class = "info-box",
+                               p("American plaice is found in the North Atlantic Ocean, from the eastern coast of North America to the waters off Greenland and Iceland. It is commonly found in shallow, coastal waters and deeper offshore areas."),
+                               br(),br(),
                                h3("Management"),
-                               p("Management of American plaice involves setting catch limits, monitoring stock assessments, and enforcing regulations to ensure sustainable fishing practices. Measures include quota systems, closed areas, and size limits to protect juvenile fish.")
-                           ),
-                           div(class = "info-box",
+                               p("Management of American plaice involves setting catch limits, monitoring stock assessments, and enforcing regulations to ensure sustainable fishing practices. Measures include quota systems, closed areas, and size limits to protect juvenile fish."),
+                               br(),br(),
                                h3("Stock Status"),
-                               p("American plaice is classified as a species of concern due to historical overfishing and habitat degradation. Management measures have been implemented to protect and rebuild the stock, including catch limits and seasonal closures.")
+                               p("American plaice is classified as a species of concern due to historical overfishing and habitat degradation. Management measures have been implemented to protect and rebuild the stock, including catch limits and seasonal closures."),
                            )
                        )
                 ),
@@ -49,6 +49,9 @@ ui <- dashboardPage(
                        tags$img(src = "american_plaice.jpg", height = "300px", width = "auto", alt = "American Plaice", class = "fish-image")
                 )
               )
+              )
+            )
+        )
       ),
       tabItem(tabName = "inputs",
               h2("Stock Assessment Inputs", class = "section-title"),

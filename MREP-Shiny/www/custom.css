@@ -2,7 +2,7 @@
 
 /* Style for section titles */
 .section-title {
-  color: #2c3e50;
+  color: #00608a;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -49,7 +49,7 @@
 .info-box h3 {
   font-size: 18px;
   font-weight: bold;
-  color: #34495e;
+  color: #00608a;
   margin-top: 0;
 }
 
@@ -97,4 +97,52 @@ th {
 .tab-panel {
   margin: 15px 0;
 }
+
+
+/* Change the color of the title text */
+.skin-blue .main-header .logo {
+  background-color: #00608a;
+  color: white;
+}
+
+/* Change the color of the text in the header */
+.skin-blue .main-header .navbar .sidebar-toggle {
+  color: white;
+}
+
+/* Change the color of the dropdown menu items in the header */
+.skin-blue .main-header .navbar .nav > li > a {
+  color: white;
+}
+
+/* Ensure the header is consistent on small screens */
+.skin-blue .main-header .logo {
+  background-color: #00608a !important;
+  color: white !important;
+}
+
+
+/* Header customization */
+/* Change the background color of the header */
+.skin-blue .main-header .navbar {
+  background-color: #00608a;
+}
+
+/* Custom CSS to make the sidebar wider */
+.main-sidebar {
+  width: 400px !important; /* Adjust this width as needed */
+}
+
+/* Adjust the content area to accommodate the wider sidebar */
+.content-wrapper, .main-footer {
+  margin-left: 400px !important; /* Match this to the sidebar width */
+}
+
+/* Optional: Adjust the sidebar menu items if needed */
+.sidebar-menu > li > a {
+  padding: 10px 15px !important; /* Adjust padding as needed */
+}
+
+
+
 
