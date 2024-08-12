@@ -51,6 +51,7 @@ ui <- dashboardPage(
                         )
                       )
                   )
+                  )
                   ,
                   tabPanel("American Plaice",
                            fluidRow(
@@ -79,14 +80,14 @@ ui <- dashboardPage(
                                p("American plaice is current not overfished and not experiencing overfishing. A rebuilding plan was put in place in 2004 and the stock was rebuilt in 2019.")
                            )
                        )
-                )
-                )
+              
                 ),
                 column(width = 4,
                        tags$img(src = "american_plaice.jpg", height = "300px", width = "auto", alt = "American Plaice", class = "fish-image")
                 )
+                           )
               )
-          )
+                )
       ),
       tabItem(tabName = "inputs",
               h2("Stock Assessment Inputs", class = "section-title"),
