@@ -10,9 +10,10 @@ ui <- dashboardPage(
     sidebarMenu(
       menuItem("Home", tabName = "home", icon = icon("home")),
       menuItem("Stock Assessment Inputs", tabName = "inputs", icon = icon("bar-chart")),
-      menuItem("Explore the Current Assessment", tabName = "results", icon = icon("file-alt")),
+      menuItem("Explore Current Assessment", tabName = "results", icon = icon("file-alt")),
       menuItem("Explore Impacts of Changes in Catch", tabName = "fisheryDependent", icon = icon("chart-line")),
-      menuItem("Explore Impacts of Changes in Survey Indices", tabName = "fisheryIndependent", icon = icon("chart-bar"))
+      menuItem("Explore Impacts of Changes in Indices", tabName = "fisheryIndependent", icon = icon("chart-bar")),
+      menuItem("About", tabName = "about", icon = icon("info"))
     )
   ),
   dashboardBody(
@@ -72,15 +73,17 @@ ui <- dashboardPage(
                                br(),br(),
                                h3("Stock Status"),
                                p("American plaice is classified as a species of concern due to historical overfishing and habitat degradation. Management measures have been implemented to protect and rebuild the stock, including catch limits and seasonal closures."),
+
                            )
                        )
+              
                 ),
                 column(width = 4,
                        tags$img(src = "american_plaice.jpg", height = "300px", width = "auto", alt = "American Plaice", class = "fish-image")
                 )
+                           )
               )
               )
-            )
       ),
       tabItem(tabName = "inputs",
               h2("Stock Assessment Inputs", class = "section-title"),
@@ -90,7 +93,7 @@ ui <- dashboardPage(
                            div(class = "info-box",
                                h3("Select Input Type"),
                                selectInput("inputType", "Choose Input Type:",
-                                           choices = c("Index" = "index",
+                                           choices = c("Stock Index" = "index",
                                                        "Catch" = "catch",
                                                        "Natural Mortality" = "mortality",
                                                        "Maturity" = "maturity",
@@ -99,18 +102,17 @@ ui <- dashboardPage(
                                                        "Selectivity" = "selectivity"))
                            ),
                            div(class = "info-box",
-                               h3("Input Data Description"),
                                uiOutput("inputDescription")
                            ),
                            div(class = "info-box",
-                               h3("Input Data Plot"),
+                               uiOutput("inputHeaders"),
                                plotOutput("inputPlot")
                            )
                        )
                 ),
                 column(width = 6,
                        div(class = "info-box",
-                           h3("Input Data Table"),
+                           uiOutput("inputHeaders2"),
                            tableOutput("dataTable")
                        )
                 )
@@ -125,7 +127,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Biomass"),
+                                          h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot")
                                       )
                                   )
@@ -133,8 +135,10 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass: Definitions and Interpretation"),
-                                          p("Biomass estimates provide an indication of the total amount of fish in the stock. Higher biomass typically suggests a healthier stock.")
+                                          h3("Spawning Stock Biomass: Definitions and Interpretation"),
+                                          p("Biomass estimates provide an indication of the total amount of fish in the stock."), 
+                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."), 
+                                          p("For American Plaice estimates show a large decrease in the 1980s followed by a gradual increase through the last few decades.")
                                       )
                                   )
                            )
@@ -143,7 +147,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Fishing Mortality Rate"),
+                                          h3("Fishing Mortality"),
                                           plotOutput("fishingMortalityPlot")
                                       )
                                   )
@@ -151,8 +155,9 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Fishing Mortality Rates Definitions and Interpretation"),
-                                          p("Fishing mortality rate show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
+                                          h3("Fishing Mortality Definitions and Interpretation"),
+                                          p("Fishing mortality (F) is the rate at which fish die due to fishing activity."), 
+                                          p("For American Plaice estimates show F coming up to a peak in the mid-1980s then gradual decreasing over the next few decades.")
                                       )
                                   )
                            )
@@ -170,7 +175,8 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Recruitment: Definitions and Interpretation"),
-                                          p("Recruitment measures the addition of new fish to the stock. Successful recruitment is critical for maintaining and growing the fish population.")
+                                          p("Recruitment measures the addition of new fish to the stock."),
+                                          p("For American Plaice recrtuiment has been variable without a trend throughout the time series.")
                                       )
                                   )
                            )
@@ -182,7 +188,9 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Biomass Reference Points: Definitions and Interpretation"),
-                                          p("Biomass reference points are used to gauge the health of the stock. These include target and limit values.")
+                                          p("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished)."),
+                                          p("These include target (solid grey line) and threshold (dashed grey line) values.") ,
+                                          p("For American Plaice biomass has stayed above the threshold (not overfished) and above the target in more recent decades.")
                                       )
                                   )
                            ),
@@ -190,7 +198,8 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Fishing Mortality Reference Points: Definitions and Interpretation"),
-                                          p("Fishing mortality reference points help to determine sustainable fishing levels. These points are crucial for effective fishery management.")
+                                          p("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).") ,
+                                          p("For American Plaice F was over the threshold (overfishing) for the beginning of the time series then below the threshold (not overfishing) after the mid-1990s and for the remainder of the time series.")
                                       )
                                   )
                            )
@@ -219,7 +228,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Model Diagnostics"),
-                                      p("Diagnostics help to assess the performance and fit of the stock assessment model. This includes checking residuals, fit statistics, and validation results.")
+                                      p("Diagnostics help to assess the performance and fit of the stock assessment model.")
                                   ),
                                   div(class = "info-box",
                                       h3("Diagnostics Plot"),
@@ -229,7 +238,7 @@ ui <- dashboardPage(
                            column(width = 4,
                                   div(class = "info-box",
                                       h3("Interpretation"),
-                                      p("Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis and comparison with observed data.")
+                                      p("Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis, fit statistics, and retrospective analysis.")
                                   )
                            )
                          )
@@ -245,7 +254,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Fishery Dependent Data Input Change"),
-                                      p("Decrease catch by 50%")
+                                      p("This scenario compares the reported catch (green) to catch decreased by 50% (blue) to show the impact of catch on stock assessment results.")
                                   ),
                                   div(class = "info-box",
                                       h3("Scenario Comparison Plot"),
@@ -266,7 +275,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Biomass Estimates"),
+                                          h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot2")
                                       )
                                   )
@@ -274,8 +283,10 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass: Definitions and Interpretation"),
-                                          p("Biomass estimates provide an indication of the total amount of fish in the stock. Higher biomass typically suggests a healthier stock.")
+                                          h3("Spawning Stock Biomass: Definitions and Interpretation"),
+                                          p("Biomass estimates provide an indication of the total amount of fish in the stock."),
+                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."),
+                                          p("When catch is decreased by 50% the biomass estimate is also decreased by 50%")
                                       )
                                   )
                            )
@@ -284,7 +295,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Fishing Mortality Rate"),
+                                          h3("Fishing Mortality"),
                                           plotOutput("fishingMortalityPlot2")
                                       )
                                   )
@@ -292,8 +303,10 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Fishing Mortality Rate: Definitions and Interpretation"),
-                                          p("Fishing mortality rate show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
+                                          h3("Fishing Mortality: Definitions and Interpretation"),
+                                          p("Fishing mortality (F) is the rate at which fish die due to fishing activity."),
+                                          p("When catch is decreased by 50% the fishing mortality rate does not change."),
+                                          p("This occurs becasue the proportion of fish being removed is still the same since biomass also decreased by 50%.")
                                       )
                                   )
                            )
@@ -311,7 +324,8 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Recruitment: Definitions and Interpretation"),
-                                          p("Recruitment measures the addition of new fish to the stock. Successful recruitment is critical for maintaining and growing the fish population.")
+                                          p("Recruitment measures the addition of new fish to the stock."),
+                                          p("When catch is decreased by 50% the recruitment also decreases by 50%.")
                                       )
                                   )
                            )
@@ -323,7 +337,9 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Biomass Reference Points: Definitions and Interpretation"),
-                                          p("Biomass reference points are used to gauge the health of the stock. These include target and limit values.")
+                                          p("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished)."),
+                                          p("The biomass thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line).") ,
+                                          p("When catch is decreased by 50% the reference point also decreases and the stock status remains the same.")
                                       )
                                   )
                            ),
@@ -331,7 +347,9 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Fishing Mortality Reference Points: Definitions and Interpretation"),
-                                          p("Fishing mortality reference points help to determine sustainable fishing levels. These points are crucial for effective fishery management.")
+                                          p("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).") ,
+                                          p("The fishing mortaliy thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line)."),
+                                          p("When catch is decreased by 50% the reference point remains the same.")
                                       )
                                   )
                            )
@@ -360,7 +378,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Model Diagnostics"),
-                                      p("Diagnostics help to assess the performance and fit of the stock assessment model. This includes checking residuals, fit statistics, and validation results.")
+                                      p("Diagnostics help to assess the performance and fit of the stock assessment model.")
                                   ),
                                   div(class = "info-box",
                                       h3("Diagnostics Plot"),
@@ -370,7 +388,7 @@ ui <- dashboardPage(
                            column(width = 4,
                                   div(class = "info-box",
                                       h3("Interpretation"),
-                                      p("Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis and comparison with observed data.")
+                                      p("Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis, fit statistics, and retrospective analysis.")
                                   )
                            )
                          )
@@ -386,7 +404,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Fishery Independent Data Input Change"),
-                                      p("Decrease index by 50%")
+                                      p("This scenario compares the regular indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results.")
                                   ),
                                   div(class = "info-box",
                                       h3("Scenario Comparison Plot"),
@@ -398,16 +416,17 @@ ui <- dashboardPage(
                                       h3("Scenario Comparison Table"),
                                       tableOutput("dataTable3")
                                       
-                                  )
+                                  
                            )
                          )
+                      )
                 ),
                 tabPanel("Stock Assessment Estimates",
                          fluidRow(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Biomass Estimates"),
+                                          h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot3")
                                       )
                                   )
@@ -415,8 +434,10 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Biomass: Definitions and Interpretation"),
-                                          p("Biomass estimates provide an indication of the total amount of fish in the stock. Higher biomass typically suggests a healthier stock.")
+                                          h3("Spanwing Stock Biomass: Definitions and Interpretation"),
+                                          p("Biomass estimates provide an indication of the total amount of fish in the stock."),
+                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."), 
+                                          p("When indices are decreased by 50% the biomass estimate remains the same.")
                                       )
                                   )
                            )
@@ -425,7 +446,7 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
-                                          h3("Fishing Mortality Rate"),
+                                          h3("Fishing Mortality"),
                                           plotOutput("fishingMortalityPlot3")
                                       )
                                   )
@@ -433,8 +454,9 @@ ui <- dashboardPage(
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
-                                          h3("Fishing Mortality Rate: Definitions and Interpretation"),
-                                          p("Fishing mortality rate show the proportion of the stock removed by fishing. Lower rates are usually more desirable to ensure stock sustainability.")
+                                          h3("Fishing Mortality: Definitions and Interpretation"),
+                                          p("Fishing mortality (F) is the rate at which fish die due to fishing activity."),
+                                          p("When indices are decreased by 50% the fishing mortality rate remains the same.")
                                       )
                                   )
                            )
@@ -452,8 +474,8 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Recruitment: Definitions and Interpretation"),
-                                          p("Recruitment measures the addition of new fish to the stock. Successful recruitment is critical for maintaining and growing the fish population.")
-                                      )
+                                          p("Recruitment measures the addition of new fish to the stock."),
+                                          p("When indices are decreased by 50% the recruitment remains the same.")                                      )
                                   )
                            )
                          )
@@ -464,15 +486,18 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Biomass Reference Points: Definitions and Interpretation"),
-                                          p("Biomass reference points are used to gauge the health of the stock. These include target and limit values.")
-                                      )
+                                          p("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished)."),
+                                          p("The biomass thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line).") ,
+                                          p("When indices are decreased by 50% the reference point and stock status remains the same.")                                      )
                                   )
                            ),
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Fishing Mortality Reference Points: Definitions and Interpretation"),
-                                          p("Fishing mortality reference points help to determine sustainable fishing levels. These points are crucial for effective fishery management.")
+                                          p("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).") ,
+                                          p("The fishing mortaliy thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line)."),
+                                          p("When indices are decreased by 50% the reference point and stock status remains the same")
                                       )
                                   )
                            )
@@ -511,16 +536,51 @@ ui <- dashboardPage(
                            column(width = 4,
                                   div(class = "info-box",
                                       h3("Intrepretation"),
-                                      p("Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis and comparison with observed data.")
+                                      p("Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis, fit statistics, and retrospective analysis")
                                   )
                            )
                          )
                 )
               )
-      )
+      ),
+      tabItem(tabName = "about", 
+              h2("About", class = "section-title"),
+              fluidRow(
+                column(width = 6,
+                       div(class = "info-container",
+                           div(class = "info-box",
+                               h3("Project Goal"),
+                               p("Develop an intutitive and interactive stock assessment modeling tool to improve understanding of how different data elements and uncertainties impact an analytical model.")
+                           ),
+                           div(class = "info-box",
+                               h3("Project Team"),
+                               p("PI: Dr. Lisa Kerr"),
+                               p("Analyst and web application developer: Jerelle Jesse")
+                           ),
+                           div(class = "info-box",
+                               h3("Funding Support"),
+                               p("New England Fishery Management Council")
+                           ),
+                           div(class = "info-box",
+                               h3("Acknowledgements"),
+                               p("MREP Greater Atlantic Steering Committee"),
+                               p("Gulf of Maine Research Institute")
+                           )
+                       )
+                ),
+                column(width = 4,
+                       br(),
+                       tags$img(src = "umaine.jpg", height = "200px", width = "auto", alt = "", class = ""),
+                       br(),br(),br(),
+                       tags$img(src = "nefmc.jpg", height = "71px", width = "auto", alt = "", class = ""),
+                       br(),br(),br(),
+                       tags$img(src = "gmri.jpg", height = "117px", width = "auto", alt = "", class = ""),
+                       
+              )
+         )
+       )
     )
   )
 )
-
 
 
