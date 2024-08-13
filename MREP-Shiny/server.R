@@ -5,13 +5,13 @@ library(ggplot2)
 library(tidyverse)
 server <- function(input, output, session) {
   # data
-  inputs_year <- read.csv(here::here("MREP-Shiny/data/yearly_data.csv"))
-  inputs_age <- read.csv(here::here("MREP-Shiny/data/input_age.csv"))
-  weight_data <- read.csv(here::here("MREP-Shiny/data/weight_data.csv"))
-  catch_bias <- read.csv(here::here("MREP-Shiny/data/catch_bias_data.csv"))
-  index_bias <- read.csv(here::here("MREP-Shiny/data/index_bias_data.csv"))
-  refs <- read.csv(here::here("MREP-Shiny/data/Ref_data.csv"))
-  catchability <- read.csv(here::here("MREP-Shiny/data/catchability.csv"))
+  inputs_year <- read.csv(here::here("data/yearly_data.csv"))
+  inputs_age <- read.csv(here::here("data/input_age.csv"))
+  weight_data <- read.csv(here::here("data/weight_data.csv"))
+  catch_bias <- read.csv(here::here("data/catch_bias_data.csv"))
+  index_bias <- read.csv(here::here("data/index_bias_data.csv"))
+  refs <- read.csv(here::here("data/Ref_data.csv"))
+  catchability <- read.csv(here::here("data/catchability.csv"))
     
   input_data <- reactive({
     switch(input$inputType,
