@@ -28,13 +28,53 @@ server <- function(input, output, session) {
   output$inputDescription <- renderUI({
     inputType <- input$inputType
     descriptions <- c(
-      index = "An index of abundance or biomass provides information about the relative abundance or biomass of the fish stock. This data comes from fishery independent surveys and monitoring. For American Plaice there are four surveys based on the Northeast Fishery Science Center trawl survey spilt bewteen different research vessels. 1. Spring Albatross (solid green), 2. Spring Bigelow (dashed green), 3. Fall Albatross (solid blue), 4. Fall Bigelow (dashed blue)",
-      catch = "Total catch for a stock includes commercial and recreational landings and discards. Dealer reports provide a census odf commercial landings and Vessel Trip Reports provide a census of fishing effort by stock area and the two are linked to derive landings by stock area.ssels. At sea monitoring (e.g. Fisheries Observer Program) is primarily ised to estimate discarded commercial catch. Recreational data is collected through the MRIP program which uses a combination of angler intercept surveys and mail-based surveys to characterize catch. For American Plaice, catch inludes only commercial landings and discards becasue they are not encountered in the recreational fishery.",
-      mortality = "Natural mortality (M) data indicates the rate at which fish die due to natural causes. Natural mortality is usually a fixed number but can vary over ages or time. This data can come from tagging, relationships with life-history traits, or sometimes be estimated in the stock assessment model.  For American Plaice, natural mortality is assumed as 0.3 for all ages.",
-      maturity = "Maturity data describes the proportion of the fish population that has reached reproductive age. This data comes from fishery independent surveys that take biological information.",
-      weight = "Weight-at-age data provides information on the average weight of fish at different ages. There can be different weight-at-age for fishery indpendent data and fishery dependent data",
-      catchability = "Catchability (q) data reflects the probability of capturing a fish in a survey. This can be estimated in the stock assessment model. Each index has an associated catchability. For American Plaice: Spring Albatross (solid green), Spring Bigelow (dashed green), Fall Albatross (solid blue), Fall Bigelow (dashed blue)",
-      selectivity = "Selectivity data shows how the fishing gear affects different age groups of the fish stock. This can be estimated in the stock assessment model and gear selectivity studies."
+      index = tagList(
+        tags$ul(
+          tags$li("An index of abundance or biomass provides information about the relative abundance or biomass of the fish stock.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("This data comes from fishery independent surveys and monitoring.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("For American Plaice there are four surveys based on the Northeast Fishery Science Center trawl survey spilt bewteen different research vessels. 1. Spring Albatross (solid green), 2. Spring Bigelow (dashed green), 3. Fall Albatross (solid blue), 4. Fall Bigelow (dashed blue)", style= "font-size: 16px; color: #7f8c8d")
+      )),
+      
+      catch = tagList(
+        tags$ul(
+          tags$li("Total catch for a stock includes commercial and recreational landings and discards.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("Dealer reports provide a census of commercial landings and Vessel Trip Reports provide a census of fishing effort by stock area and the two are linked to derive landings by stock area.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("At sea monitoring (e.g. Fisheries Observer Program) is primarily ised to estimate discarded commercial catch.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("Recreational data is collected through the MRIP program which uses a combination of angler intercept surveys and mail-based surveys to characterize catch.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("For American Plaice, catch inludes only commercial landings and discards becasue they are not encountered in the recreational fishery.", style= "font-size: 16px; color: #7f8c8d")
+          )
+        ),
+      
+      mortality = tagList(
+        tags$ul(
+        tags$li("Natural mortality (M) data indicates the rate at which fish die due to natural causes.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("Natural mortality is usually a fixed number but can vary over ages or time. This data can come from tagging, relationships with life-history traits, or sometimes be estimated in the stock assessment model.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("For American Plaice, natural mortality is assumed as 0.3 for all ages.", style= "font-size: 16px; color: #7f8c8d")
+        )
+        ),
+      maturity = tagList(
+        tags$ul(
+        tags$li("Maturity data describes the proportion of the fish population that has reached reproductive age.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("This data comes from fishery independent surveys that take biological information.", style= "font-size: 16px; color: #7f8c8d")
+        )
+        ),
+      weight = tagList(
+        tags$ul(
+        tags$li("Weight-at-age data provides information on the average weight of fish at different ages.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("There can be different weight-at-age for fishery indpendent data and fishery dependent data", style= "font-size: 16px; color: #7f8c8d")
+        )
+        ),
+      catchability = tagList(
+        tags$ul(
+        tags$li("Catchability (q) data reflects the probability of capturing a fish in a survey.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("This can be estimated in the stock assessment model. Each index has an associated catchability.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("For American Plaice: Spring Albatross (solid green), Spring Bigelow (dashed green), Fall Albatross (solid blue), Fall Bigelow (dashed blue)", style= "font-size: 16px; color: #7f8c8d")
+        )),
+      selectivity = tagList(
+        tags$ul(
+        tags$li("Selectivity data shows how the fishing gear affects different age groups of the fish stock.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("This can be estimated in the stock assessment model and gear selectivity studies.", style= "font-size: 16px; color: #7f8c8d")
+        ))
     )
     headers <- c(
       index = "Stock Index",
@@ -137,6 +177,7 @@ server <- function(input, output, session) {
     input_data()
   })
   
+
   output$biomassPlot <- renderPlot({
     ggplot(inputs_year)+ geom_line(aes(x=year, y= SSB), color=gmri_cols("green"), linewidth=1)+
     geom_ribbon(aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)+
@@ -213,11 +254,11 @@ server <- function(input, output, session) {
   })
   
   output$dataTable2 <- renderTable({
-    df <- data.frame(Year=inputs_year$year, "High Catch"=inputs_year$catch, "Low Catch"=catch_bias$catch)
+    df <- data.frame(Year=inputs_year$year, "Reported Catch"=inputs_year$catch, "Low Catch"=catch_bias$catch)
   })
   
   output$dataTable3 <- renderTable({
-    df <- data.frame(Year=inputs_year$year, "High Index1"=inputs_year$V1, "Low Index1"=index_bias$V1)
+    df <- data.frame(Year=inputs_year$year, "Observed Index1"=inputs_year$V1, "Low Index1"=index_bias$V1)
   })
   
   output$biomassPlot2 <- renderPlot({

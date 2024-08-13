@@ -1,12 +1,13 @@
 # Load required libraries
 library(shiny)
 library(shinydashboard)
+library(shinycssloaders)
 library(ggplot2)
 
 # UI Definition
 ui <- dashboardPage(
-  dashboardHeader(title = "Stock Assessment Dashboard"),
-  dashboardSidebar(width=325,
+  dashboardHeader(title = "I-FSH "),
+  dashboardSidebar(width=300,
     sidebarMenu(
       menuItem("Home", tabName = "home", icon = icon("home")),
       menuItem("Stock Assessment Inputs", tabName = "inputs", icon = icon("bar-chart")),
@@ -17,67 +18,64 @@ ui <- dashboardPage(
     )
   ),
   dashboardBody(
-    tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
+    tags$head(
+     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
     tabItems(
       tabItem(tabName = "home",
-                tabsetPanel(
-                  id = "infoTabs",
-                  tabPanel(
-                    "About",
-                    fluidRow(
-                      column(
-                        width = 12,
-                        div(
-                          class = "info-container",
-                          div(
-                            class = "info-box",
-                            style = "background-color: #f8f9fa; padding: 20px; border-radius: 10px;",
-                            h3("Interactive Stock Assessment Dashboard", style = "color: #00608a; font-weight: bold;"),
-                            p("This interactive stock assessment modeling tool helps users understand how different data elements and uncertainties impact stock assessment models.",
-                              style = "font-size: 16px; line-height: 1.5;"),
-                            hr(),
-                            h4("Key Questions Addressed", style = "color: #343a40; margin-top: 20px;"),
-                            p(tags$ul(
-                              tags$li("What are the inputs needed for a stock assessment? How are they used?"),
-                              tags$li("What do assessment results look like? How do we test the performance of a stock assessment?"),
-                              tags$li("How does changing inputs alter the results and performance of the assessments?")
-                            )),
-                            p("The tool uses American Plaice as an illustrative example.",
-                              style = "font-style: italic; color: #6c757d; margin-top: 20px;"),
-                            hr(),
-                            p("Explore the tool to learn more about the dynamics of stock assessments!",
-                              style = "text-align: center; font-weight: bold; margin-top: 20px;")
-                          )
-                        )
+            tabsetPanel(
+              id = "infoTabs",
+              tabPanel(
+                "About",
+                fluidRow(
+                  column(
+                    width = 12,
+                    div(
+                      class = "info-container",
+                      div(
+                        class = "info-box",
+                        style = "background-color: #f8f9fa; padding: 20px; border-radius: 10px;",
+                        h3("Interactive Fisheries Stock Assessment Hub", style = "color: #00608a; font-weight: bold;"),
+                        p("This interactive stock assessment modeling tool helps users understand how different data elements and uncertainties impact stock assessment models.",
+                          style = "font-size: 18px; line-height: 1.5;"),
+                        hr(),
+                        h4("Key Questions Addressed", style = "color: #343a40; margin-top: 20px;"),
+                        p(tags$ul(
+                          tags$li("What are the inputs needed for a stock assessment? How are they used?", style= "font-size: 18px"),
+                          tags$li("What do assessment results look like? How do we test the performance of a stock assessment?",  style= "font-size: 18px"),
+                          tags$li("How does changing inputs alter the results and performance of the assessments?",  style= "font-size: 18px")
+                        )),
+                        p("The tool uses American Plaice as an illustrative example.",
+                          style = "font-style: italic; color: #6c757d; margin-top: 20px;"),
+                        hr(),
+                        p("Explore the tool to learn more about the dynamics of stock assessments!",
+                          style = "text-align: center; font-weight: bold; margin-top: 20px;")
                       )
+                    )
                   )
-                  )
-                  ,
-                  tabPanel("American Plaice",
-                           fluidRow(
-                             column(width = 8,
+                )
+              )
+              ,
+               tabPanel("American Plaice",
+                fluidRow(
+                  column(width = 8,
+                         h3("American Plaice (Hippoglossoides platessoides)", style = "color: #00608a; font-weight: bold;"),
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Appearance"),
-                               p("American plaice is a right-eyed flounder. They have a large mouth, rounded tail, and straight lateral line. They are reddish-brown on their eyed side and white on their underside. "),
-                                br(),br(),
+                               p("American plaice has a diamond-shaped body with a pale, light brown color, often with darker spots. The eyes are located on the right side of the body, and the fish has both dorsal and anal fins that extend along the length of the body."),
+                               br(),br(),
                                h3("Biology"),
-                               p("American plaice can live for more than 20 years. They feed on smaller fish and invertebrates."),
+                               p("American plaice is a demersal fish that lives on the seafloor. It feeds on smaller fish and invertebrates. The species has a lifespan of up to 20 years and reaches sexual maturity at around 3-4 years of age."),
                                br(),br(),
                                h3("Range"),
-                               p("American plaice are found in the North Atlantic Ocean, ranging from southern Labrador to Rhode Island. They are distributed throughout the Gulf of Maine and Georges Bank."),
-                               br(),br(),
-                               h3("Habitat"),
-                               p("American plaice are found in waters between 130 and 980 feet deep and live on the ocean bottom in areas covered by sand, mud, or gravel."),
-                               br(),br(),
-                               h3("Fishery"),
-                               p("American Plaice commercial landings totaled 1.5 million pounds in 2022, valued at $2.5 million. They are typically harvested using trawl nets and not commonly encounterd in the recreational fishery."),
+                               p("American plaice is found in the North Atlantic Ocean, from the eastern coast of North America to the waters off Greenland and Iceland. It is commonly found in shallow, coastal waters and deeper offshore areas."),
                                br(),br(),
                                h3("Management"),
-                               p("American Plaice is managed by NOAA Fisheries and the New England Fishery Management Council. Management of American plaice involves setting catch limits, minimum sizes, and time/area closures. Regular stock assessment are conducted to monitor the stock."),
+                               p("Management of American plaice involves setting catch limits, monitoring stock assessments, and enforcing regulations to ensure sustainable fishing practices. Measures include quota systems, closed areas, and size limits to protect juvenile fish."),
                                br(),br(),
                                h3("Stock Status"),
-                               p("American plaice is current not overfished and not experiencing overfishing. A rebuilding plan was put in place in 2004 and the stock was rebuilt in 2019.")
+                               p("American plaice is classified as a species of concern due to historical overfishing and habitat degradation. Management measures have been implemented to protect and rebuild the stock, including catch limits and seasonal closures."),
+
                            )
                        )
               
@@ -87,7 +85,7 @@ ui <- dashboardPage(
                 )
                            )
               )
-                )
+              )
       ),
       tabItem(tabName = "inputs",
               h2("Stock Assessment Inputs", class = "section-title"),
@@ -96,7 +94,7 @@ ui <- dashboardPage(
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Select Input Type"),
-                               selectInput("inputType", "Choose Input Type:",
+                               selectInput("inputType", "",
                                            choices = c("Stock Index" = "index",
                                                        "Catch" = "catch",
                                                        "Natural Mortality" = "mortality",
@@ -128,13 +126,13 @@ ui <- dashboardPage(
                 id = "resultsTabs",
                 tabPanel("Stock Assessment Estimates",
                          fluidRow(
-                           column(width = 6,
+                          column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot")
-                                      )
-                                  )
+                                    )
+                                )
                            ),
                            column(width = 6,
                                   div(class = "info-container",
@@ -530,7 +528,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Model Diagnostics"),
-                                      p("Diagnostics help to assess the performance and fit of the stock assessment model. This includes checking residuals, fit statistics, and validation results.")
+                                      p("Diagnostics help to assess the performance and fit of the stock assessment model.")
                                   ),
                                   div(class = "info-box",
                                       h3("Diagnostics Plot"),
