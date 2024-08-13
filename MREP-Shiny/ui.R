@@ -1,12 +1,13 @@
 # Load required libraries
 library(shiny)
 library(shinydashboard)
+library(shinycssloaders)
 library(ggplot2)
 
 # UI Definition
 ui <- dashboardPage(
-  dashboardHeader(title = "Stock Assessment Dashboard"),
-  dashboardSidebar(width=325,
+  dashboardHeader(title = "I-FSH "),
+  dashboardSidebar(width=300,
     sidebarMenu(
       menuItem("Home", tabName = "home", icon = icon("home")),
       menuItem("Stock Assessment Inputs", tabName = "inputs", icon = icon("bar-chart")),
@@ -18,7 +19,7 @@ ui <- dashboardPage(
   ),
   dashboardBody(
     tags$head(
-      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
+     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
     tabItems(
       tabItem(tabName = "home",
             tabsetPanel(
@@ -33,15 +34,15 @@ ui <- dashboardPage(
                       div(
                         class = "info-box",
                         style = "background-color: #f8f9fa; padding: 20px; border-radius: 10px;",
-                        h3("Interactive Stock Assessment Dashboard", style = "color: #00608a; font-weight: bold;"),
+                        h3("Interactive Fisheries Stock Assessment Hub", style = "color: #00608a; font-weight: bold;"),
                         p("This interactive stock assessment modeling tool helps users understand how different data elements and uncertainties impact stock assessment models.",
-                          style = "font-size: 16px; line-height: 1.5;"),
+                          style = "font-size: 18px; line-height: 1.5;"),
                         hr(),
                         h4("Key Questions Addressed", style = "color: #343a40; margin-top: 20px;"),
                         p(tags$ul(
-                          tags$li("What are the inputs needed for a stock assessment? How are they used?"),
-                          tags$li("What do assessment results look like? How do we test the performance of a stock assessment?"),
-                          tags$li("How does changing inputs alter the results and performance of the assessments?")
+                          tags$li("What are the inputs needed for a stock assessment? How are they used?", style= "font-size: 18px"),
+                          tags$li("What do assessment results look like? How do we test the performance of a stock assessment?",  style= "font-size: 18px"),
+                          tags$li("How does changing inputs alter the results and performance of the assessments?",  style= "font-size: 18px")
                         )),
                         p("The tool uses American Plaice as an illustrative example.",
                           style = "font-style: italic; color: #6c757d; margin-top: 20px;"),
@@ -57,6 +58,7 @@ ui <- dashboardPage(
                tabPanel("American Plaice",
                 fluidRow(
                   column(width = 8,
+                         h3("American Plaice (Hippoglossoides platessoides)", style = "color: #00608a; font-weight: bold;"),
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Appearance"),
@@ -92,7 +94,7 @@ ui <- dashboardPage(
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Select Input Type"),
-                               selectInput("inputType", "Choose Input Type:",
+                               selectInput("inputType", "",
                                            choices = c("Stock Index" = "index",
                                                        "Catch" = "catch",
                                                        "Natural Mortality" = "mortality",
@@ -124,13 +126,13 @@ ui <- dashboardPage(
                 id = "resultsTabs",
                 tabPanel("Stock Assessment Estimates",
                          fluidRow(
-                           column(width = 6,
+                          column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Spawning Stock Biomass"),
                                           plotOutput("biomassPlot")
-                                      )
-                                  )
+                                    )
+                                )
                            ),
                            column(width = 6,
                                   div(class = "info-container",
@@ -526,7 +528,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Model Diagnostics"),
-                                      p("Diagnostics help to assess the performance and fit of the stock assessment model. This includes checking residuals, fit statistics, and validation results.")
+                                      p("Diagnostics help to assess the performance and fit of the stock assessment model.")
                                   ),
                                   div(class = "info-box",
                                       h3("Diagnostics Plot"),
