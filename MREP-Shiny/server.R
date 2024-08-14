@@ -140,32 +140,39 @@ server <- function(input, output, session) {
       geom_line(aes(x=Year, y=Index4), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
       expand_limits(y = 0)+
       ylab("Stock Indices (kg/tow)") +
-      theme_minimal(),
+      theme_minimal()+
+      theme(text = element_text(size = 16)),
       
       "catch" = ggplot(data)+ geom_col(aes(x=Year, y= Catch), width= 0.8, color=gmri_cols("green"),fill=gmri_cols("green"))+
       ylab("Catch (mt)") +
-      theme_minimal(),
+      theme_minimal()+
+      theme(text = element_text(size = 16)),
     
       "mortality" = ggplot(data)+geom_line(aes(x=Age, y=M), linewidth=1.5,color=gmri_cols("green"))+
-      theme_minimal(),
+       theme_minimal()+
+      theme(text = element_text(size = 16)),
       
       "maturity" = ggplot(data)+geom_line(aes(x=Age, y=Maturity),color=gmri_cols("green"), linewidth=1.5)+
       labs(y= "Maturity") +
-      theme_minimal(),
+       theme_minimal()+
+      theme(text = element_text(size = 16)),
     
      "selectivity" = ggplot(data)+geom_line(aes(x=Age, y=Selectivity),color=gmri_cols("green"), linewidth=1.5)+
       labs(y= "Fishery selectivity") +
-      theme_minimal(),
+      theme_minimal()+
+      theme(text = element_text(size = 16)),
     
       "weight" = ggplot(data)+geom_line(aes(x=Year, y=Weight, color=factor(Age)), linewidth=1.5)+
       labs(y= "Weight-at-age for SSB")+
       scale_color_gmri(palette = "main", guide="none") +
-      theme_minimal(),
+      theme_minimal()+
+      theme(text = element_text(size = 16)),
     
       "catchability" = ggplot(data)+geom_line(aes(x=Year, y=Catchability, color=factor(Survey), linetype=factor(Survey)), linewidth=1.5)+
       scale_color_manual(values = custom_colors, guide="none") +
       scale_linetype_manual(values = custom_linetypes, guide="none") +
       theme_minimal() +
+      theme(text = element_text(size = 16))+
       labs(color = "Survey", linetype = "Survey")
       )
       print(p)
@@ -183,7 +190,8 @@ server <- function(input, output, session) {
     geom_ribbon(aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)+
       expand_limits(y = 0)+
       labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$fishingMortalityPlot <- renderPlot({
@@ -191,7 +199,8 @@ server <- function(input, output, session) {
       geom_ribbon( aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("green") , alpha=0.5)+
       labs(title = "", x = "Year", y = "Fishing Mortality") +
       expand_limits(y = 0)+
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$recruitmentPlot <- renderPlot({
@@ -199,7 +208,8 @@ server <- function(input, output, session) {
       geom_ribbon(aes(x=year, ymin= R_lower, ymax=R_upper),fill=gmri_cols("green") , alpha=0.5)+
       labs(title = "", x = "Year", y = "Recruitment (000s)") +
       expand_limits(y = 0)+
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$biomassReferencePlot <- renderPlot({
@@ -209,7 +219,8 @@ server <- function(input, output, session) {
       geom_hline(yintercept = refs$base[2]/2, color="grey", linewidth=1, linetype="dashed")+
       expand_limits(y = 0)+
       labs(x = "Year", y = "Biomass (mt)") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$fishingMortalityReferencePlot <- renderPlot({
@@ -217,7 +228,8 @@ server <- function(input, output, session) {
       geom_ribbon(aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("green") , alpha=0.5)+
       geom_hline(yintercept = refs$base[1], color="grey", linewidth=1)+
       labs(title = "", x = "Year", y = "Fishing Mortality") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$diagnosticsPlot <- renderPlot({
@@ -235,7 +247,8 @@ server <- function(input, output, session) {
       geom_ribbon(data = catch_bias, aes(x = year, ymin = catch_lower, ymax = catch_upper), fill = gmri_cols("gmri blue"), alpha = 0.5)+
       expand_limits(y = 0)+
       labs(x = "Year", y = "Catch (mt)") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$comparisonPlot2 <- renderPlot({
@@ -250,7 +263,8 @@ server <- function(input, output, session) {
       geom_line(data = index_bias, aes(x = year, y = V4), color = gmri_cols("gmri green"), linewidth = 1, linetype = "dashed") +
       expand_limits(y = 0) +
       labs( y = "Indices (kg/tow)", x = "Year") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$dataTable2 <- renderTable({
@@ -268,7 +282,8 @@ server <- function(input, output, session) {
       geom_ribbon(data=catch_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       expand_limits(y = 0) +
       labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$fishingMortalityPlot2 <- renderPlot({
@@ -278,7 +293,8 @@ server <- function(input, output, session) {
       geom_ribbon(data=catch_bias, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       expand_limits(y = 0) +
       labs(title = "", x = "Year", y = "Fishing Mortality") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$recruitmentPlot2 <- renderPlot({
@@ -288,7 +304,8 @@ server <- function(input, output, session) {
       geom_ribbon(data=catch_bias, aes(x=year, ymin= R_lower, ymax=R_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       expand_limits(y = 0) +
       labs(title = "", x = "Year", y = "Recruitment (000s)") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$biomassPlot3 <- renderPlot({
@@ -298,7 +315,8 @@ server <- function(input, output, session) {
       geom_ribbon(data=index_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       expand_limits(y = 0) +
       labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   output$fishingMortalityPlot3 <- renderPlot({
     ggplot()+ geom_line(data=inputs_year, aes(x=year, y= F), color=gmri_cols("green"), linewidth=1)+
@@ -306,7 +324,8 @@ server <- function(input, output, session) {
       geom_line(data=index_bias, aes(x=year, y= F), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
       geom_ribbon(data=index_bias, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       labs(title = "", x = "Year", y = "Fishing Mortality") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$recruitmentPlot3 <- renderPlot({
@@ -316,7 +335,8 @@ server <- function(input, output, session) {
       geom_ribbon(data=index_bias, aes(x=year, ymin= R_lower, ymax=R_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       expand_limits(y = 0) +
       labs(title = "", x = "Year", y = "Recruitment") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$biomassReferencePlot2 <- renderPlot({
@@ -328,7 +348,8 @@ server <- function(input, output, session) {
       geom_hline(yintercept=refs$catch[2], color="grey", linewidth=1, linetype="dashed")+
       expand_limits(y = 0) +
       labs(x = "Year", y = "Biomass") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$fishingMortalityReferencePlot2 <- renderPlot({
@@ -340,7 +361,8 @@ server <- function(input, output, session) {
       geom_hline(yintercept = refs$catch[1], color="grey", linewidth=1, linetype="dashed")+
       expand_limits(y = 0) +
       labs(title = "", x = "Year", y = "Fishing Mortality") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   output$biomassReferencePlot3 <- renderPlot({
     ggplot()+ geom_line(data=inputs_year,aes(x=year, y=SSB), color=gmri_cols("green"), linewidth=1)+
@@ -351,7 +373,8 @@ server <- function(input, output, session) {
       geom_hline(yintercept=refs$index[2], color="grey", linewidth=1, linetype="dashed")+
       expand_limits(y = 0) +
       labs(x = "Year", y = "Biomass (mt)") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
   output$fishingMortalityReferencePlot3 <- renderPlot({
@@ -362,7 +385,8 @@ server <- function(input, output, session) {
       geom_ribbon(data=index_bias, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
       geom_hline(yintercept = refs$index[1], color="grey", linewidth=1, linetype="dashed")+
       labs(title = "", x = "Year", y = "Fishing Mortality") +
-      theme_minimal()
+      theme_minimal()+
+      theme(text = element_text(size = 16))
   })
   
 }

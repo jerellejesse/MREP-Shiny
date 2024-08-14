@@ -90,7 +90,7 @@ ui <- dashboardPage(
       tabItem(tabName = "inputs",
               h2("Stock Assessment Inputs", class = "section-title"),
               fluidRow(
-                column(width = 6,
+                column(width = 8,
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Select Input Type"),
@@ -112,7 +112,7 @@ ui <- dashboardPage(
                            )
                        )
                 ),
-                column(width = 6,
+                column(width = 4,
                        div(class = "info-box",
                            uiOutput("inputHeaders2"),
                            tableOutput("dataTable")
@@ -126,7 +126,7 @@ ui <- dashboardPage(
                 id = "resultsTabs",
                 tabPanel("Stock Assessment Estimates",
                          fluidRow(
-                          column(width = 6,
+                          column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Spawning Stock Biomass"),
@@ -134,19 +134,19 @@ ui <- dashboardPage(
                                     )
                                 )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Spawning Stock Biomass: Definitions and Interpretation"),
-                                          p("Biomass estimates provide an indication of the total amount of fish in the stock."), 
-                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."), 
-                                          p("For American Plaice estimates show a large decrease in the 1980s followed by a gradual increase through the last few decades.")
+                                          p(tags$li("Biomass estimates provide an indication of the total amount of fish in the stock.", style= "font-size: 16px; color: #7f8c8d")), 
+                                          p(tags$li("Spawning stock biomass (SSB) is the biomass of reproductively mature fish.", style= "font-size: 16px; color: #7f8c8d")), 
+                                          p(tags$li("For American Plaice estimates show a large decrease in the 1980s followed by a gradual increase through the last few decades.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
                          ),
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Fishing Mortality"),
@@ -154,18 +154,18 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Fishing Mortality Definitions and Interpretation"),
-                                          p("Fishing mortality (F) is the rate at which fish die due to fishing activity."), 
-                                          p("For American Plaice estimates show F coming up to a peak in the mid-1980s then gradual decreasing over the next few decades.")
+                                          p(tags$li("Fishing mortality (F) is the rate at which fish die due to fishing activity.", style= "font-size: 16px; color: #7f8c8d")), 
+                                          p(tags$li("For American Plaice estimates show F coming up to a peak in the mid-1980s then gradual decreasing over the next few decades.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
                          ),
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Recruitment"),
@@ -173,12 +173,12 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Recruitment: Definitions and Interpretation"),
-                                          p("Recruitment measures the addition of new fish to the stock."),
-                                          p("For American Plaice recrtuiment has been variable without a trend throughout the time series.")
+                                          p(tags$li("Recruitment measures the addition of new fish to the stock.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("For American Plaice recrtuiment has been variable without a trend throughout the time series.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
@@ -190,9 +190,9 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Biomass Reference Points: Definitions and Interpretation"),
-                                          p("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished)."),
-                                          p("These include target (solid grey line) and threshold (dashed grey line) values.") ,
-                                          p("For American Plaice biomass has stayed above the threshold (not overfished) and above the target in more recent decades.")
+                                          p(tags$li("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished).", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("These include target (solid grey line) and threshold (dashed grey line) values.", style= "font-size: 16px; color: #7f8c8d")) ,
+                                          p(tags$li("For American Plaice biomass has stayed above the threshold (not overfished) and above the target in more recent decades.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            ),
@@ -200,8 +200,8 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Fishing Mortality Reference Points: Definitions and Interpretation"),
-                                          p("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).") ,
-                                          p("For American Plaice F was over the threshold (overfishing) for the beginning of the time series then below the threshold (not overfishing) after the mid-1990s and for the remainder of the time series.")
+                                          p(tags$li("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).", style= "font-size: 16px; color: #7f8c8d")) ,
+                                          p(tags$li("For American Plaice F was over the threshold (overfishing) for the beginning of the time series then below the threshold (not overfishing) after the mid-1990s and for the remainder of the time series.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
@@ -274,7 +274,7 @@ ui <- dashboardPage(
                 ),
                 tabPanel("Stock Assessment Estimates",
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Spawning Stock Biomass"),
@@ -282,19 +282,19 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Spawning Stock Biomass: Definitions and Interpretation"),
-                                          p("Biomass estimates provide an indication of the total amount of fish in the stock."),
-                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."),
-                                          p("When catch is decreased by 50% the biomass estimate is also decreased by 50%")
+                                          p(tags$li("Biomass estimates provide an indication of the total amount of fish in the stock.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("Spawning stock biomass (SSB) is the biomass of reproductively mature fish.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("When catch is decreased by 50% the biomass estimate is also decreased by 50%", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
                          ),
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Fishing Mortality"),
@@ -302,19 +302,19 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Fishing Mortality: Definitions and Interpretation"),
-                                          p("Fishing mortality (F) is the rate at which fish die due to fishing activity."),
-                                          p("When catch is decreased by 50% the fishing mortality rate does not change."),
-                                          p("This occurs becasue the proportion of fish being removed is still the same since biomass also decreased by 50%.")
+                                          p(tags$li("Fishing mortality (F) is the rate at which fish die due to fishing activity.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("When catch is decreased by 50% the fishing mortality rate does not change.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("This occurs becasue the proportion of fish being removed is still the same since biomass also decreased by 50%.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
                          ),
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Recruitment"),
@@ -322,12 +322,12 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Recruitment: Definitions and Interpretation"),
-                                          p("Recruitment measures the addition of new fish to the stock."),
-                                          p("When catch is decreased by 50% the recruitment also decreases by 50%.")
+                                          p(tags$li("Recruitment measures the addition of new fish to the stock.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("When catch is decreased by 50% the recruitment also decreases by 50%.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
@@ -339,9 +339,9 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Biomass Reference Points: Definitions and Interpretation"),
-                                          p("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished)."),
-                                          p("The biomass thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line).") ,
-                                          p("When catch is decreased by 50% the reference point also decreases and the stock status remains the same.")
+                                          p(tags$li("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished).", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("The biomass thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line).", style= "font-size: 16px; color: #7f8c8d")) ,
+                                          p(tags$li("When catch is decreased by 50% the reference point also decreases and the stock status remains the same.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            ),
@@ -349,9 +349,9 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Fishing Mortality Reference Points: Definitions and Interpretation"),
-                                          p("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).") ,
-                                          p("The fishing mortaliy thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line)."),
-                                          p("When catch is decreased by 50% the reference point remains the same.")
+                                          p(tags$li("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).", style= "font-size: 16px; color: #7f8c8d")) ,
+                                          p(tags$li("The fishing mortaliy thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line).", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("When catch is decreased by 50% the reference point remains the same.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
@@ -406,7 +406,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Fishery Independent Data Input Change"),
-                                      p("This scenario compares the regular indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results.")
+                                      p("This scenario compares the observed indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results.")
                                   ),
                                   div(class = "info-box",
                                       h3("Scenario Comparison Plot"),
@@ -425,7 +425,7 @@ ui <- dashboardPage(
                 ),
                 tabPanel("Stock Assessment Estimates",
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Spawning Stock Biomass"),
@@ -433,19 +433,19 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Spanwing Stock Biomass: Definitions and Interpretation"),
-                                          p("Biomass estimates provide an indication of the total amount of fish in the stock."),
-                                          p("Spawning stock biomass (SSB) is the biomass of reproductively mature fish."), 
-                                          p("When indices are decreased by 50% the biomass estimate remains the same.")
+                                          p(tags$li("Biomass estimates provide an indication of the total amount of fish in the stock.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("Spawning stock biomass (SSB) is the biomass of reproductively mature fish.", style= "font-size: 16px; color: #7f8c8d")), 
+                                          p(tags$li("When indices are decreased by 50% the biomass estimate remains the same.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
                          ),
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Fishing Mortality"),
@@ -453,18 +453,18 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Fishing Mortality: Definitions and Interpretation"),
-                                          p("Fishing mortality (F) is the rate at which fish die due to fishing activity."),
-                                          p("When indices are decreased by 50% the fishing mortality rate remains the same.")
+                                          p(tags$li("Fishing mortality (F) is the rate at which fish die due to fishing activity.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("When indices are decreased by 50% the fishing mortality rate remains the same.", style= "font-size: 16px; color: #7f8c8"))
                                       )
                                   )
                            )
                          ),
                          fluidRow(
-                           column(width = 6,
+                           column(width = 8,
                                   div(class = "info-container",
                                       div(class = "info-box plot-container",
                                           h3("Recruitment"),
@@ -472,12 +472,12 @@ ui <- dashboardPage(
                                       )
                                   )
                            ),
-                           column(width = 6,
+                           column(width = 4,
                                   div(class = "info-container",
                                       div(class = "info-box definition-box",
                                           h3("Recruitment: Definitions and Interpretation"),
-                                          p("Recruitment measures the addition of new fish to the stock."),
-                                          p("When indices are decreased by 50% the recruitment remains the same.")                                      )
+                                          p(tags$li("Recruitment measures the addition of new fish to the stock.", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("When indices are decreased by 50% the recruitment remains the same.", style= "font-size: 16px; color: #7f8c8d"))                                      )
                                   )
                            )
                          )
@@ -488,18 +488,18 @@ ui <- dashboardPage(
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Biomass Reference Points: Definitions and Interpretation"),
-                                          p("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished)."),
-                                          p("The biomass thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line).") ,
-                                          p("When indices are decreased by 50% the reference point and stock status remains the same.")                                      )
+                                          p(tags$li("Biomass reference points are metrics used to determine the status of the stock (overfished/ not overfished).", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("The biomass thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line).", style= "font-size: 16px; color: #7f8c8d")) ,
+                                          p(tags$li("When indices are decreased by 50% the reference point and stock status remains the same.", style= "font-size: 16px; color: #7f8c8d"))                                      )
                                   )
                            ),
                            column(width = 6,
                                   div(class = "info-container",
                                       div(class = "info-box",
                                           h3("Fishing Mortality Reference Points: Definitions and Interpretation"),
-                                          p("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).") ,
-                                          p("The fishing mortaliy thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line)."),
-                                          p("When indices are decreased by 50% the reference point and stock status remains the same")
+                                          p(tags$li("Fishing mortality reference points are metrics used to determine sustainable fishing levels (overfishing/ not overfishing).", style= "font-size: 16px; color: #7f8c8d")) ,
+                                          p(tags$li("The fishing mortaliy thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line).", style= "font-size: 16px; color: #7f8c8d")),
+                                          p(tags$li("When indices are decreased by 50% the reference point and stock status remains the same", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
