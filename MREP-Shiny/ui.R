@@ -458,7 +458,7 @@ ui <- dashboardPage(
                                       div(class = "info-box definition-box",
                                           h3("Fishing Mortality: Definitions and Interpretation"),
                                           p(tags$li("Fishing mortality (F) is the rate at which fish die due to fishing activity.", style= "font-size: 16px; color: #7f8c8d")),
-                                          p(tags$li("When indices are decreased by 50% the fishing mortality rate remains the same.", style= "font-size: 16px; color: #7f8c8"))
+                                          p(tags$li("When indices are decreased by 50% the fishing mortality rate remains the same.", style= "font-size: 16px; color: #7f8c8d"))
                                       )
                                   )
                            )
