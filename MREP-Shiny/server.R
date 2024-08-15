@@ -3,6 +3,7 @@ library(here)
 library(gmRi)
 library(ggplot2)
 library(tidyverse)
+library(DT)
 server <- function(input, output, session) {
   # data
   inputs_year <- read.csv(here::here("data/yearly_data.csv"))
@@ -21,7 +22,7 @@ server <- function(input, output, session) {
            "maturity" = data.frame(Age=inputs_age$Age, Maturity=inputs_age$maturity),
            "weight" = data.frame(Year=weight_data$Year, Age=weight_data$Age, Weight=weight_data$Weight),
            "selectivity" = data.frame(Age= inputs_age$Age, Selectivity= inputs_age$selectivity),
-           "catchability" = data.frame(Survey= catchability$Survey, Year=catchability$Year, Catchability= catchability$catchability)
+           "catchability" = data.frame(Survey= catchability$survey, Year=catchability$Year, Catchability= catchability$catchability)
     )
   })
 
@@ -32,8 +33,17 @@ server <- function(input, output, session) {
         tags$ul(
           tags$li("An index of abundance or biomass provides information about the relative abundance or biomass of the fish stock.", style= "font-size: 16px; color: #7f8c8d"),
           tags$li("This data comes from fishery independent surveys and monitoring.", style= "font-size: 16px; color: #7f8c8d"),
-          tags$li("For American Plaice there are four surveys based on the Northeast Fishery Science Center trawl survey spilt bewteen different research vessels. 1. Spring Albatross (solid green), 2. Spring Bigelow (dashed green), 3. Fall Albatross (solid blue), 4. Fall Bigelow (dashed blue)", style= "font-size: 16px; color: #7f8c8d")
-      )),
+          tags$li("For American Plaice there are four surveys based on the Northeast Fishery Science Center trawl survey spilt bewteen different research vessels.",
+                  style = "font-size: 16px; color: #7f8c8d",
+                   tags$ul(
+             tags$li("1. Spring Albatross (solid green)", style= "font-size: 16px; color: #38431d"),
+             tags$li("2. Spring Bigelow (dashed green)", style= "font-size: 16px; color: #38431d"),
+             tags$li("3. Fall Albatross (solid blue)", style= "font-size: 16px; color: #00608a"),
+             tags$li("4. Fall Bigelow (dashed blue)", style= "font-size: 16px; color: #00608a")
+          )
+          )
+        )
+      ),
       
       catch = tagList(
         tags$ul(
@@ -66,9 +76,16 @@ server <- function(input, output, session) {
         ),
       catchability = tagList(
         tags$ul(
-        tags$li("Catchability (q) data reflects the probability of capturing a fish in a survey.", style= "font-size: 16px; color: #7f8c8d"),
-        tags$li("This can be estimated in the stock assessment model. Each index has an associated catchability.", style= "font-size: 16px; color: #7f8c8d"),
-        tags$li("For American Plaice: Spring Albatross (solid green), Spring Bigelow (dashed green), Fall Albatross (solid blue), Fall Bigelow (dashed blue)", style= "font-size: 16px; color: #7f8c8d")
+          tags$li("Catchability (q) data reflects the probability of capturing a fish in a survey.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("This can be estimated in the stock assessment model. Each index has an associated catchability.", style= "font-size: 16px; color: #7f8c8d"),
+          tags$li("For American Plaice:", style= "font-size: 16px; color: #7f8c8d" ,
+               tags$ul(
+                tags$li("1. Spring Albatross (solid green)", style= "font-size: 16px; color: #38431d"),
+                tags$li("2. Spring Bigelow (dashed green)", style= "font-size: 16px; color: #38431d"),
+                tags$li("3. Fall Albatross (solid blue)", style= "font-size: 16px; color: #00608a"),
+                tags$li("4. Fall Bigelow (dashed blue)", style= "font-size: 16px; color: #00608a")
+               )
+              )
         )),
       selectivity = tagList(
         tags$ul(
@@ -120,27 +137,42 @@ server <- function(input, output, session) {
     h3(headers[[inputType]])
     
   })
-  custom_colors <- c("1" = "#38431d", 
-                     "2" = "#38431d",  
-                     "3" = "#00608a",
-                     "4"= "#00608a")  
+  custom_colors <- c("Survey1" = "#38431d", 
+                     "Index2" = "#38431d",  
+                     "Index3" = "#00608a",
+                     "Index4"= "#00608a")  
   
-  custom_linetypes <- c("1" = "solid",
-                        "2" = "dashed",
-                        "3" = "solid",
-                        "4"= "dashed")
+  custom_linetypes <- c("Index1" = "solid",
+                        "Index2" = "dashed",
+                        "Index3" = "solid",
+                        "Index4"= "dashed")
   
     output$inputPlot <- renderPlot({
       data <- input_data()
       
       p <- switch(input$inputType,
-    "index" = ggplot(data)+ geom_line(aes(x=Year, y=Index1), color=gmri_cols("green"), linewidth=1)+
-      geom_line(aes(x=Year, y=Index2), color=gmri_cols("green"), linewidth=1, linetype="dashed")+
-      geom_line(aes(x=Year, y=Index3), color=gmri_cols("gmri blue"), linewidth=1)+
-      geom_line(aes(x=Year, y=Index4), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
-      expand_limits(y = 0)+
+    "index" = ggplot(data) +
+      geom_line(aes(x = Year, y = Index1, color = "Index1", linetype = "Index1"), 
+                linewidth = 1) +
+      geom_line(aes(x = Year, y = Index2, color = "Index2", linetype = "Index2"), 
+                linewidth = 1) +
+      geom_line(aes(x = Year, y = Index3, color = "Index3", linetype = "Index3"), 
+                linewidth = 1) +
+      geom_line(aes(x = Year, y = Index4, color = "Index4", linetype = "Index4"), 
+                linewidth = 1) +
+      scale_color_manual(values = c("Index1" = "#38431d",
+                                    "Index2" = "#38431d",
+                                    "Index3" = "#00608a",
+                                    "Index4" = "#00608a")) +
+      scale_linetype_manual(values = c("Index1" = "solid",
+                                       "Index2" = "dashed",
+                                       "Index3" = "solid",
+                                       "Index4" = "dashed"))+
+      guides(color = guide_legend("Stock Indices"), 
+             linetype = guide_legend("Stock Indices")) +
+      expand_limits(y = 0) +
       ylab("Stock Indices (kg/tow)") +
-      theme_minimal()+
+      theme_minimal() +
       theme(text = element_text(size = 16)),
       
       "catch" = ggplot(data)+ geom_col(aes(x=Year, y= Catch), width= 0.8, color=gmri_cols("green"),fill=gmri_cols("green"))+
@@ -180,10 +212,29 @@ server <- function(input, output, session) {
 
   
 
-  output$dataTable <- renderTable({
-    input_data()
-  })
+  # output$dataTable <- renderDT({ # have to change ui to DToutput
+  #   inputType <- input$inputType
+  # 
+  #   if(inputType =="catchability"){
+  #      data <- input_data()%>%
+  #       pivot_wider(names_from = Survey, values_from = Catchability)
+  #   } else {
+  #    data<- input_data()
+  #   }
+  #   datatable(data, options=list(pageLength = 42))
+  # 
+  # })
   
+output$dataTable <- renderTable({
+     inputType <- input$inputType
+  
+     if(inputType =="catchability"){
+         input_data()%>%
+         pivot_wider(names_from = Survey, values_from = Catchability)
+     } else {
+       input_data()
+   }
+})
 
   output$biomassPlot <- renderPlot({
     ggplot(inputs_year)+ geom_line(aes(x=year, y= SSB), color=gmri_cols("green"), linewidth=1)+

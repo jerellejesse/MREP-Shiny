@@ -165,8 +165,10 @@ tidy_cat <- catchability %>%
     names_to = "survey",          
     values_to = "catchability"          
   )
-tidy_cat<- separate(tidy_cat, survey,c("junk", "Survey"), sep="(?<=[A-Za-z])(?=[0-9])")%>%
-  select(!junk)
+tidy_cat<- tidy_cat <- tidy_cat %>%
+  mutate(survey = str_replace(survey, "V", "Index"))
+  # separate(tidy_cat, survey,c("junk", "Survey"), sep="(?<=[A-Za-z])(?=[0-9])")%>%
+  # select(!junk)
 #write.csv(tidy_cat, here::here("MREP-Shiny/data/catchability.csv"))
 
 dfs <-list(Mat, MAA_mean, Sel)
