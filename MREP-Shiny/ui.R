@@ -62,22 +62,27 @@ ui <- dashboardPage(
                        div(class = "info-container",
                            div(class = "info-box",
                                h3("Appearance"),
-                               p("American plaice has a diamond-shaped body with a pale, light brown color, often with darker spots. The eyes are located on the right side of the body, and the fish has both dorsal and anal fins that extend along the length of the body."),
-                               br(),br(),
+                               p("American plaice is a right-eyed flounder. They have a large mouth, rounded tail, and straight lateral line. They are reddish-brown on their eyed side and white on their underside. "),
+                                br(),br(),
                                h3("Biology"),
-                               p("American plaice is a demersal fish that lives on the seafloor. It feeds on smaller fish and invertebrates. The species has a lifespan of up to 20 years and reaches sexual maturity at around 3-4 years of age."),
-                               br(),br(),
+                               p("American plaice can live for more than 20 years. They feed on smaller fish and invertebrates."),
+                              br(),br(),
                                h3("Range"),
-                               p("American plaice is found in the North Atlantic Ocean, from the eastern coast of North America to the waters off Greenland and Iceland. It is commonly found in shallow, coastal waters and deeper offshore areas."),
-                               br(),br(),
+                               p("American plaice are found in the North Atlantic Ocean, ranging from southern Labrador to Rhode Island. They are distributed throughout the Gulf of Maine and Georges Bank."),
+                              br(),br(),
+                               h3("Habitat"),
+                               p("American plaice are found in waters between 130 and 980 feet deep and live on the ocean bottom in areas covered by sand, mud, or gravel."),
+                              br(),br(),
+                               h3("Fishery"),
+                               p("American Plaice commercial landings totaled 1.5 million pounds in 2022, valued at $2.5 million. They are typically harvested using trawl nets and not commonly encounterd in the recreational fishery."),
+                              br(),br(),
                                h3("Management"),
-                               p("Management of American plaice involves setting catch limits, monitoring stock assessments, and enforcing regulations to ensure sustainable fishing practices. Measures include quota systems, closed areas, and size limits to protect juvenile fish."),
-                               br(),br(),
+                               p("American Plaice is managed by NOAA Fisheries and the New England Fishery Management Council. Management of American plaice involves setting catch limits, minimum sizes, and time/area closures. Regular stock assessment are conducted to monitor the stock."),
+                              br(),br(),
                                h3("Stock Status"),
-                               p("American plaice is classified as a species of concern due to historical overfishing and habitat degradation. Management measures have been implemented to protect and rebuild the stock, including catch limits and seasonal closures."),
-
+                               p("American plaice is current not overfished and not experiencing overfishing. A rebuilding plan was put in place in 2004 and the stock was rebuilt in 2019.")
                            )
-                       )
+                           )
               
                 ),
                 column(width = 4,
