@@ -137,7 +137,7 @@ server <- function(input, output, session) {
     h3(headers[[inputType]])
     
   })
-  custom_colors <- c("Survey1" = "#38431d", 
+  custom_colors <- c("Index1" = "#38431d", 
                      "Index2" = "#38431d",  
                      "Index3" = "#00608a",
                      "Index4"= "#00608a")  
