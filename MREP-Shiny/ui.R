@@ -2,6 +2,7 @@
 library(shiny)
 library(shinydashboard)
 library(shinycssloaders)
+library(shinyjs)
 library(ggplot2)
 
 # UI Definition
@@ -18,8 +19,48 @@ ui <- dashboardPage(
     )
   ),
   dashboardBody(
+    shinyjs::useShinyjs(),
     tags$head(
-     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
+     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css"),
+    tags$style(HTML(" 
+     #full-page-spinner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 1000;
+        display: none; /* Ensure it's hidden initially */
+        display: flex; /* Added display flex for debugging */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      
+      .spinner-icon {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #00608a;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+      
+      .spinner-text {
+        margin-top: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #00608a;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    "))
+    ),
     tabItems(
       tabItem(tabName = "home",
             tabsetPanel(
@@ -127,6 +168,10 @@ ui <- dashboardPage(
       ),
       tabItem(tabName = "results",
               h2("Stock Assessment Results", class = "section-title"),
+              # div(id = "full-page-spinner",
+              #     div(class="spinner-icon"),
+              #     div(class = "spinner-text", "Running Assessment!"),
+              # ),
               tabsetPanel(
                 id = "resultsTabs",
                 tabPanel("Stock Assessment Estimates",
@@ -261,8 +306,13 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Fishery Dependent Data Input Change"),
-                                      p("This scenario compares the reported catch (green) to catch decreased by 50% (blue) to show the impact of catch on stock assessment results.")
-                                  ),
+                                      p("This scenario compares the reported catch (green) to catch decreased by 50% (blue) to show the impact of catch on stock assessment results."),
+                                      br(),
+                                      selectInput("dataSelection", 
+                                                  "Select Input Change:",
+                                                  choices = list("Lower Catch"="low",
+                                                                 "Higher Catch"="high"))
+                                      ),
                                   div(class = "info-box",
                                       h3("Scenario Comparison Plot"),
                                       plotOutput("comparisonPlot")
@@ -411,7 +461,15 @@ ui <- dashboardPage(
                            column(width = 8,
                                   div(class = "info-box",
                                       h3("Fishery Independent Data Input Change"),
-                                      p("This scenario compares the observed indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results.")
+                                      p("This scenario compares the observed indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results."),
+                                      br(),
+                                      checkboxGroupInput("indexSelection",
+                                                         "Select Input Change:",
+                                                         c("Index 1"= "V1",
+                                                           "Index 2" = "V2",
+                                                           "Index 3"= "V3",
+                                                           "Index 4" = "V4"),
+                                                         inline=TRUE)
                                   ),
                                   div(class = "info-box",
                                       h3("Scenario Comparison Plot"),
@@ -586,6 +644,7 @@ ui <- dashboardPage(
               )
          )
        )
+
     )
   )
 )
