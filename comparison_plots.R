@@ -8,7 +8,8 @@ library(gmRi)
 
 base <- readRDS(here::here("WHAM_runs/Base/Base.rds"))
 #bias <- readRDS(here::here("WHAM_runs/BiasCatch/BiasCatch.rds"))
- bias <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
+bias <- readRDS(here::here("WHAM_runs/BiasCatch/HighCatch.rds"))
+#bias <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
 
 #### SSB plot ####
 
@@ -289,7 +290,7 @@ f_full <- FAA_mean[,11]
 
 F40 <- list()
 for (x in 1:n_sims) {
-  F40[[x]] <- base$reps[[x]]$log_FXSPR%>%
+  F40[[x]] <- base$reps[[x]]$log_FXSPR_static%>%
     exp()
 }
 F40_mean <- apply(simplify2array(F40), 1, mean)

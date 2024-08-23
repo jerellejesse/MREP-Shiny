@@ -10,6 +10,7 @@ library(gmRi)
 data <- readRDS(here::here("WHAM_runs/Base/Base.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasCatch/BiasCatch.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
+data <- readRDS(here::here("WHAM_runs/BiasCatch/HighCatch.rds"))
 
 #### Index
 n_sims <- 10
@@ -109,6 +110,7 @@ input_year <- Reduce(function(x,y) full_join(x,y, by="year"), dfs)
 dfs <- list(catch_metric_data, SSB_data, F_data, R_data)
 input_catch <- Reduce(function(x,y) full_join(x,y, by="year"), dfs)
 #write.csv(input_catch, here::here("MREP-Shiny/data/catch_bias_data.csv"))
+#write.csv(input_catch, here::here("MREP-Shiny/data/high_catch.csv"))
 
 # index bias
 dfs <- list(index_mean,catch_metric_data, SSB_data, F_data, R_data)
@@ -178,7 +180,7 @@ input_age <- Reduce(function(x,y) full_join(x,y, by="Age"), dfs)
 #### Reference points
 F40 <- list()
 for (x in 1:n_sims) {
-  F40[[x]] <- data$reps[[x]]$log_FXSPR%>%
+  F40[[x]] <- data$reps[[x]]$log_FXSPR_static%>%
     exp()
 }
 F40_mean <- apply(simplify2array(F40), 1, mean)
@@ -192,7 +194,7 @@ Fref <- data.frame(base, catch, index)
 SSB40 <- list()
 n_sims <- 10
 for (x in 1:n_sims) {
-  SSB40[[x]] <- data$reps[[x]]$log_SSB_FXSPR%>%
+  SSB40[[x]] <- data$reps[[x]]$log_SSB_FXSPR_static%>%
     exp()
 }
 
