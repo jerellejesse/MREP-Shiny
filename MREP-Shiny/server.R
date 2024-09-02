@@ -93,7 +93,9 @@ server <- function(input, output, session) {
       selectivity = tagList(
         tags$ul(
         tags$li("Selectivity data shows how the fishing gear affects different age groups of the fish stock.", style= "font-size: 16px; color: #7f8c8d"),
-        tags$li("This can be estimated in the stock assessment model and gear selectivity studies.", style= "font-size: 16px; color: #7f8c8d")
+        tags$li("This can be estimated in the stock assessment model and gear selectivity studies.", style= "font-size: 16px; color: #7f8c8d"),
+        tags$li("Selectivity can be different for different time periods.", style= "font-size: 16px; color: #7f8c8d")
+        
         ))
     )
     headers <- c(
@@ -105,9 +107,9 @@ server <- function(input, output, session) {
       catchability = "Catchability",
       selectivity = "Selectivity"
     )
-  div(
+  tags$div(
     h3(headers[[inputType]]),
-    p(descriptions[[inputType]])
+    tags$p(descriptions[[inputType]])
     )
   })
   
@@ -321,7 +323,7 @@ selected_catch <- reactive({
       geom_line(data = selected_data, aes(x = year, y = catch, color = "Bias Catch", linetype = "Bias Catch"), linewidth = 1) +
       geom_ribbon(data = selected_data, aes(x = year, ymin = catch_lower, ymax = catch_upper, fill = "Bias Catch"), alpha = 0.5) +
       expand_limits(y = 0) +
-      labs(x = "Year", y = "Catch (mt)", color = "Legend", fill = "Legend", linetype = "Legend") +
+      labs(x = "Year", y = "Catch (mt)", color = "", fill = "", linetype = "") + # fills out the legend
       scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
@@ -330,11 +332,23 @@ selected_catch <- reactive({
       ylim(0, 40000)
     
   })
-  
   output$comparisonPlot2 <- renderPlot({
+    ggplot() +
+      geom_line(data = inputs_year, aes(x = year, y = V1), color = gmri_cols("green"), linewidth = 1) +
+      geom_line(data = inputs_year, aes(x = year, y = V2), color = gmri_cols("green"), linewidth = 1, linetype="dashed") +
+      geom_line(data = inputs_year, aes(x = year, y = V3), color = gmri_cols("gmri blue"), linewidth = 1) +
+      geom_line(data = inputs_year, aes(x = year, y = V4), color = gmri_cols("gmri blue"), linewidth = 1, linetype="dashed") +
+      geom_line(data = index_bias, aes(x = year, y = V1), color = gmri_cols("orange"), linewidth = 1) +
+      geom_line(data = index_bias, aes(x = year, y = V2), color = gmri_cols("orange"), linewidth = 1, linetype = "dashed") +
+      geom_line(data = index_bias, aes(x = year, y = V3), color = gmri_cols("gmri green"), linewidth = 1) +
+      geom_line(data = index_bias, aes(x = year, y = V4), color = gmri_cols("gmri green"), linewidth = 1, linetype = "dashed") +
+      expand_limits(y = 0) +
+      labs( y = "Indices (kg/tow)", x = "Year") +
+      theme_minimal()+
+      theme(text = element_text(size = 16))
+  })
+  output$comparisonPlot3 <- renderPlot({
    
-    selected_columns <- input$indexSelection  
-    print(input$indexSelection)
     base_colors <- c("#407331", 
                      "#407331",  
                      "#00608a",
@@ -362,17 +376,21 @@ selected_catch <- reactive({
       theme_minimal() +
       theme(text = element_text(size = 16))
     
-    if (!is.null(selected_columns)) {
-      for (i in seq_along(selected_columns)) {
-        col <- selected_columns[[i]]
-        print(col)
+    if ("base" %in% input$indexSelection){
         p <- p +
-          geom_line(data = data.frame(inputs_year), aes(x = year, y = !!sym(col)),
-                    color = base_colors[i], linetype = base_linetypes[i], linewidth = 1) +
-          geom_line(data = data.frame(index_bias), aes(x =year, y = !!sym(col)),
-                   color = bias_colors[i], linetype = bias_linetypes[i], linewidth = 1)
+          geom_line(data = inputs_year, aes(x = year, y = V1), color = gmri_cols("green"), linewidth = 1) +
+          geom_line(data = inputs_year, aes(x = year, y = V2), color = gmri_cols("green"), linewidth = 1, linetype="dashed") +
+          geom_line(data = inputs_year, aes(x = year, y = V3), color = gmri_cols("gmri blue"), linewidth = 1) +
+          geom_line(data = inputs_year, aes(x = year, y = V4), color = gmri_cols("gmri blue"), linewidth = 1, linetype="dashed")
       }
-    }
+    
+    if ("bias" %in% input$indexSelection) {
+      p<-p+
+        geom_line(data = index_bias, aes(x = year, y = V1), color = gmri_cols("gmri green"), linewidth = 1) +
+        geom_line(data = index_bias, aes(x = year, y = V2), color = gmri_cols("gmri green"), linewidth = 1, linetype = "dashed") +
+        geom_line(data = index_bias, aes(x = year, y = V3), color = gmri_cols("orange"), linewidth = 1) +
+        geom_line(data = index_bias, aes(x = year, y = V4), color = gmri_cols("orange"), linewidth = 1, linetype = "dashed")
+      }
     # ggplot() +
     #   geom_line(data = selected_index, aes(x = year, y = V1), linewidth = 1) +
     #   geom_line(data = bias_index, aes(x = year, y = V1), linewidth = 1) +
@@ -400,7 +418,7 @@ selected_catch <- reactive({
       geom_line(data=selected_data, aes(x=year, y= SSB, color="Bias Catch", linetype="Bias Catch"), linewidth=1)+
       geom_ribbon(data=selected_data, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Bias Catch") , alpha=0.5)+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)", color = "Legend", fill = "Legend", linetype = "Legend") +
+      labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)", color = "", fill = "", linetype = "") +
       scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
@@ -415,7 +433,7 @@ selected_catch <- reactive({
       geom_line(data=selected_data, aes(x=year, y= F, color="Bias Catch", linetype="Bias Catch"), linewidth=1)+
       geom_ribbon(data=selected_data, aes(x=year, ymin= F_lower, ymax=F_upper, fill="Bias Catch"), alpha=0.5)+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Fishing Mortality", color = "Legend", fill = "Legend", linetype = "Legend") +
+      labs(title = "", x = "Year", y = "Fishing Mortality", color = "", fill = "", linetype = "") +
     scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
     scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
     scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
@@ -430,7 +448,7 @@ selected_catch <- reactive({
       geom_line(data=selected_data, aes(x=year, y= R, color="Bias Catch", linetype="Bias Catch"),linewidth=1)+
       geom_ribbon(data=selected_data, aes(x=year, ymin= R_lower, ymax=R_upper, fill="Bias Catch"),alpha=0.5)+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Recruitment (000s)", color = "Legend", fill = "Legend", linetype = "Legend") +
+      labs(title = "", x = "Year", y = "Recruitment (000s)", color = "", fill = "", linetype = "") +
       scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
@@ -439,86 +457,111 @@ selected_catch <- reactive({
   })
   
   output$biomassPlot3 <- renderPlot({
-    ggplot()+ geom_line(data=inputs_year, aes(x=year, y= SSB), color=gmri_cols("green"), linewidth=1)+
-      geom_ribbon(data=inputs_year, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)+
-      geom_line(data=index_bias, aes(x=year, y= SSB), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
-      geom_ribbon(data=index_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
+    ggplot()+ geom_line(data=inputs_year, aes(x=year, y= SSB, color="Reported Index",linetype="Reported Index"), linewidth=1)+
+      geom_ribbon(data=inputs_year, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Reported Index") , alpha=0.5)+
+      geom_line(data=index_bias, aes(x=year, y= SSB, color="Bias Index", linetype="Bias Index"), linewidth=1)+
+      geom_ribbon(data=index_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Bias Index") , alpha=0.5)+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)") +
+      scale_color_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_fill_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_linetype_manual(values = c("Reported Index" = "solid", "Bias Index" = "dashed")) +
+      labs(title = "", x = "Year", y = "Spawning Stock Biomass (mt)", color = "", fill = "", linetype = "")+
       theme_minimal()+
       theme(text = element_text(size = 16))
   })
   output$fishingMortalityPlot3 <- renderPlot({
-    ggplot()+ geom_line(data=inputs_year, aes(x=year, y= F), color=gmri_cols("green"), linewidth=1)+
-      geom_ribbon(data=inputs_year, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("green") , alpha=0.5)+
-      geom_line(data=index_bias, aes(x=year, y= F), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
-      geom_ribbon(data=index_bias, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
-      labs(title = "", x = "Year", y = "Fishing Mortality") +
+    ggplot()+ geom_line(data=inputs_year, aes(x=year, y= F, color="Reported Index", linetype="Reported Index"), linewidth=1)+
+      geom_ribbon(data=inputs_year, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Reported Index") , alpha=0.5)+
+      geom_line(data=index_bias, aes(x=year, y= F, color="Bias Index", linetype="Bias Index"), linewidth=1)+
+      geom_ribbon(data=index_bias, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Bias Index") , alpha=0.5)+
+      scale_color_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_fill_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_linetype_manual(values = c("Reported Index" = "solid", "Bias Index" = "dashed")) +
+      labs(title = "", x = "Year", y = "Fishing Mortality", color = "", fill = "", linetype = "") +
       theme_minimal()+
       theme(text = element_text(size = 16))
   })
   
   output$recruitmentPlot3 <- renderPlot({
-    ggplot()+ geom_line(data=inputs_year,aes(x=year, y= R), color=gmri_cols("green"), linewidth=1)+
-      geom_ribbon(data=inputs_year,aes(x=year, ymin= R_lower, ymax=R_upper),fill=gmri_cols("green") , alpha=0.5)+
-      geom_line(data=index_bias, aes(x=year, y= R), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
-      geom_ribbon(data=index_bias, aes(x=year, ymin= R_lower, ymax=R_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
+    ggplot()+ geom_line(data=inputs_year,aes(x=year, y= R, color="Reported Index",linetype="Reported Index"), linewidth=1)+
+      geom_ribbon(data=inputs_year,aes(x=year, ymin= R_lower, ymax=R_upper,fill="Reported Index") , alpha=0.5)+
+      geom_line(data=index_bias, aes(x=year, y= R, color="Bias Index", linetype="Bias Index"), linewidth=1)+
+      geom_ribbon(data=index_bias, aes(x=year, ymin= R_lower, ymax=R_upper,fill="Bias Index") , alpha=0.5)+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Recruitment") +
+      scale_color_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_fill_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_linetype_manual(values = c("Reported Index" = "solid", "Bias Index" = "dashed")) +
+      labs(title = "", x = "Year", y = "Recruitment", color = "", fill = "", linetype = "") +
       theme_minimal()+
       theme(text = element_text(size = 16))
   })
   
   output$biomassReferencePlot2 <- renderPlot({
     selected_data <- selected_catch()
-    ggplot()+ geom_line(data=inputs_year,aes(x=year, y=SSB), color=gmri_cols("green"), linewidth=1)+
-      geom_ribbon(data=inputs_year, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)+
+    ggplot()+ geom_line(data=inputs_year,aes(x=year, y=SSB, color="Reported Catch",linetype="Reported Catch"), linewidth=1)+
+      geom_ribbon(data=inputs_year, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Reported Catch") , alpha=0.5)+
       geom_hline(yintercept=refs$base[2], color="grey", linewidth=1)+
-      geom_line(data=selected_data, aes(x=year, y=SSB), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
-      geom_ribbon(data=selected_data, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
+      geom_line(data=selected_data, aes(x=year, y=SSB, color="Bias Catch", linetype="Bias Catch"), linewidth=1)+
+      geom_ribbon(data=selected_data, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Bias Catch") , alpha=0.5)+
       geom_hline(yintercept=refs$catch[2], color="grey", linewidth=1, linetype="dashed")+
+      scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
+      scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
+      scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
+      labs(title = "", x = "Year", y = "Biomass", color = "", fill = "", linetype = "") +
       expand_limits(y = 0) +
-      labs(x = "Year", y = "Biomass") +
       theme_minimal()+
-      theme(text = element_text(size = 16))
+      theme(text = element_text(size = 16))+
+      theme(legend.position="bottom")
   })
   
   output$fishingMortalityReferencePlot2 <- renderPlot({
     selected_data <- selected_catch()
-    ggplot() + geom_line(data=inputs_year,aes(x=year, y=F), color=gmri_cols("green"), linewidth=1) +
-      geom_ribbon(data=inputs_year, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("green") , alpha=0.5)+
+    ggplot() + geom_line(data=inputs_year,aes(x=year, y=F, color="Reported Catch",linetype="Reported Catch"), linewidth=1) +
+      geom_ribbon(data=inputs_year, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Reported Catch") , alpha=0.5)+
       geom_hline(yintercept = refs$base[1], color="grey", linewidth=1)+
-      geom_line(data=selected_data, aes(x=year, y=F), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed") +
-      geom_ribbon(data=selected_data, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
+      geom_line(data=selected_data, aes(x=year, y=F, color="Bias Catch", linetype="Bias Catch"), linewidth=1 ) +
+      geom_ribbon(data=selected_data, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Bias Catch") , alpha=0.5)+
       geom_hline(yintercept = refs$catch[1], color="grey", linewidth=1, linetype="dashed")+
       expand_limits(y = 0) +
-      labs(title = "", x = "Year", y = "Fishing Mortality") +
-      theme_minimal()+
-      theme(text = element_text(size = 16))
+      scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
+      scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
+      scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
+      labs(title = "", x = "Year", y = "Fishing Mortality", color = "", fill = "", linetype = "") +
+      theme(text = element_text(size = 16))+
+      theme(legend.position="bottom")
   })
   output$biomassReferencePlot3 <- renderPlot({
-    ggplot()+ geom_line(data=inputs_year,aes(x=year, y=SSB), color=gmri_cols("green"), linewidth=1)+
-      geom_ribbon(data=inputs_year, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("green") , alpha=0.5)+
+    ggplot()+ geom_line(data=inputs_year,aes(x=year, y=SSB, color="Reported Index",linetype="Reported Index"), linewidth=1)+
+      geom_ribbon(data=inputs_year, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Reported Index") , alpha=0.5)+
       geom_hline(yintercept=refs$base[2], color="grey", linewidth=1)+
-      geom_line(data=index_bias, aes(x=year, y=SSB), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed")+
-      geom_ribbon(data=index_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
+      geom_line(data=index_bias, aes(x=year, y=SSB, color="Bias Index", linetype="Bias Index"), linewidth=1)+
+      geom_ribbon(data=index_bias, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Bias Index") , alpha=0.5)+
       geom_hline(yintercept=refs$index[2], color="grey", linewidth=1, linetype="dashed")+
       expand_limits(y = 0) +
-      labs(x = "Year", y = "Biomass (mt)") +
+      scale_color_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_fill_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_linetype_manual(values = c("Reported Index" = "solid", "Bias Index" = "dashed")) +
+      labs(title = "", x = "Year", y = "Biomass (mt)", color = "", fill = "", linetype = "") +
       theme_minimal()+
-      theme(text = element_text(size = 16))
+      theme(text = element_text(size = 16))+
+      theme(legend.position="bottom")
+    
   })
   
   output$fishingMortalityReferencePlot3 <- renderPlot({
-    ggplot() + geom_line(data=inputs_year,aes(x=year, y=F), color=gmri_cols("green"), linewidth=1) +
-      geom_ribbon(data=inputs_year, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("green") , alpha=0.5)+
+    ggplot() + geom_line(data=inputs_year,aes(x=year, y=F, color="Reported Index",linetype="Reported Index"), linewidth=1) +
+      geom_ribbon(data=inputs_year, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Reported Index") , alpha=0.5)+
       geom_hline(yintercept = refs$base[1], color="grey", linewidth=1)+
-      geom_line(data=index_bias, aes(x=year, y=F), color=gmri_cols("gmri blue"), linewidth=1, linetype="dashed") +
-      geom_ribbon(data=index_bias, aes(x=year, ymin= F_lower, ymax=F_upper),fill=gmri_cols("gmri blue") , alpha=0.5)+
+      geom_line(data=index_bias, aes(x=year, y=F, color="Bias Index", linetype="Bias Index"), linewidth=1) +
+      geom_ribbon(data=index_bias, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Bias Index") , alpha=0.5)+
       geom_hline(yintercept = refs$index[1], color="grey", linewidth=1, linetype="dashed")+
-      labs(title = "", x = "Year", y = "Fishing Mortality") +
+      scale_color_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_fill_manual(values = c("Reported Index" = "#407331", "Bias Index" = "#00608a")) +
+      scale_linetype_manual(values = c("Reported Index" = "solid", "Bias Index" = "dashed")) +
+      labs(title = "", x = "Year", y = "Biomass (mt)", color = "", fill = "", linetype = "") +
       theme_minimal()+
-      theme(text = element_text(size = 16))
+      theme(text = element_text(size = 16))+
+      theme(legend.position="bottom")
   })
   
 }

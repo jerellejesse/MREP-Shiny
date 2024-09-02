@@ -126,5 +126,8 @@ th {
   font-size: 16px; /* Adjust this value as needed */
 }
 
-
+/* Increase font size of checkbox group labels */
+.shiny-input-checkboxgroup label {
+  font-size: 16px; /* Adjust the size as needed */
+}
 

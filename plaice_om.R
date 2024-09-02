@@ -187,7 +187,7 @@ saveRDS(res, file = "HighCatch.rds")
 #### Modify index data ####
 ###########################
 run.name <- "WHAM_MT_Run4"
-asap3 <- read_asap3_dat(here("inputs/2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT"))
+asap3 <- read_asap3_dat(here::here("inputs/2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT"))
 
 # change index
 mats <- asap3$dat$IAA_mats
@@ -196,6 +196,7 @@ for (i in 1:length(mats)) {
   index[index == -499.5] <- -999
   index[, 1] <- 1980:2021
   asap3$dat$IAA_mats[[i]] <- index
+  asap3$dat$IAA_mats[[i]][,15][asap3$dat$IAA_mats[[i]][,15]== 25]<-50
 }
 
 

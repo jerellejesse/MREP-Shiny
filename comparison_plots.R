@@ -9,7 +9,7 @@ library(gmRi)
 base <- readRDS(here::here("WHAM_runs/Base/Base.rds"))
 #bias <- readRDS(here::here("WHAM_runs/BiasCatch/BiasCatch.rds"))
 bias <- readRDS(here::here("WHAM_runs/BiasCatch/HighCatch.rds"))
-#bias <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
+bias <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
 
 #### SSB plot ####
 
