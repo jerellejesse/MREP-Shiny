@@ -16,6 +16,7 @@ server <- function(input, output, session) {
   index_bias <- read.csv(here::here("MREP-Shiny/data/index_bias_data.csv"))
   refs <- read.csv(here::here("MREP-Shiny/data/Ref_data.csv"))
   catchability <- read.csv(here::here("MREP-Shiny/data/catchability.csv"))
+
     
   input_data <- reactive({
     switch(input$inputType,
