@@ -11,10 +11,10 @@ ui <- dashboardPage(
   dashboardSidebar(width=300,
     sidebarMenu(
       menuItem("Home", tabName = "home", icon = icon("home")),
-      menuItem("Stock Assessment Inputs", tabName = "inputs", icon = icon("bar-chart")),
+      menuItem("Stock Assessment Inputs", tabName = "inputs", icon = icon("fish")),
       menuItem("Explore Current Assessment", tabName = "results", icon = icon("file-alt")),
-      menuItem("Explore Impacts of Changes in Catch", tabName = "fisheryDependent", icon = icon("chart-line")),
-      menuItem("Explore Impacts of Changes in Indices", tabName = "fisheryIndependent", icon = icon("chart-bar")),
+      menuItem("Explore Impacts of Changes in Catch", tabName = "fisheryDependent", icon = icon("chart-bar")),
+      menuItem("Explore Impacts of Changes in Indices", tabName = "fisheryIndependent", icon = icon("chart-line")),
       menuItem("About", tabName = "about", icon = icon("info"))
     )
   ),
@@ -466,7 +466,8 @@ ui <- dashboardPage(
                                                          "Select Input Change:",
                                                          c("Observed Indices"= "base",
                                                            "Lower Indices" = "bias"),
-                                                         inline=TRUE)
+                                                         inline=TRUE,
+                                                         selected = "base")
                                   ),
                                   tags$div(class = "info-box",
                                       h3("Scenario Comparison Plot"),

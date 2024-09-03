@@ -259,7 +259,17 @@ selected_catch <- reactive({
   }
 })
 
-
+selected_refs <- reactive({
+  if (input$dataSelection == "low"){
+    #refs[c(1:3,5)]
+    #colnames(refs)[colnames(refs)== "catch_low"] <- "catch"
+    refs <-dplyr::rename(refs,catch=catch_low)
+  }else {
+    #refs[c(1:2,4:5)]
+    #colnames(refs)[colnames(refs)== "catch_high"] <- "catch"
+    refs <-dplyr::rename(refs, catch=catch_high)
+  }
+})
 
   output$biomassPlot <- renderPlot({
     ggplot(inputs_year)+ geom_line(aes(x=year, y= SSB), color=gmri_cols("green"), linewidth=1)+
@@ -498,12 +508,13 @@ selected_catch <- reactive({
   
   output$biomassReferencePlot2 <- renderPlot({
     selected_data <- selected_catch()
+    selected_rps <- selected_refs()
     ggplot()+ geom_line(data=inputs_year,aes(x=year, y=SSB, color="Reported Catch",linetype="Reported Catch"), linewidth=1)+
       geom_ribbon(data=inputs_year, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Reported Catch") , alpha=0.5)+
-      geom_hline(yintercept=refs$base[2], color="grey", linewidth=1)+
+      geom_hline(yintercept=selected_rps$base[2], color="grey", linewidth=1)+
       geom_line(data=selected_data, aes(x=year, y=SSB, color="Bias Catch", linetype="Bias Catch"), linewidth=1)+
       geom_ribbon(data=selected_data, aes(x=year, ymin= SSB_lower, ymax=SSB_upper,fill="Bias Catch") , alpha=0.5)+
-      geom_hline(yintercept=refs$catch[2], color="grey", linewidth=1, linetype="dashed")+
+      geom_hline(yintercept=selected_rps$catch[2], color="grey", linewidth=1, linetype="dashed")+
       scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
@@ -516,18 +527,20 @@ selected_catch <- reactive({
   
   output$fishingMortalityReferencePlot2 <- renderPlot({
     selected_data <- selected_catch()
+    selected_rps <- selected_refs()
     ggplot() + geom_line(data=inputs_year,aes(x=year, y=F, color="Reported Catch",linetype="Reported Catch"), linewidth=1) +
       geom_ribbon(data=inputs_year, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Reported Catch") , alpha=0.5)+
-      geom_hline(yintercept = refs$base[1], color="grey", linewidth=1)+
+      geom_hline(yintercept = selected_rps$base[1], color="grey", linewidth=1)+
       geom_line(data=selected_data, aes(x=year, y=F, color="Bias Catch", linetype="Bias Catch"), linewidth=1 ) +
       geom_ribbon(data=selected_data, aes(x=year, ymin= F_lower, ymax=F_upper,fill="Bias Catch") , alpha=0.5)+
-      geom_hline(yintercept = refs$catch[1], color="grey", linewidth=1, linetype="dashed")+
+      geom_hline(yintercept = selected_rps$catch[1], color="grey", linewidth=1, linetype="dashed")+
       expand_limits(y = 0) +
       scale_color_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_fill_manual(values = c("Reported Catch" = "#407331", "Bias Catch" = "#00608a")) +
       scale_linetype_manual(values = c("Reported Catch" = "solid", "Bias Catch" = "dashed")) +
       labs(title = "", x = "Year", y = "Fishing Mortality", color = "", fill = "", linetype = "") +
       theme(text = element_text(size = 16))+
+      theme_minimal()+
       theme(legend.position="bottom")
   })
   output$biomassReferencePlot3 <- renderPlot({
