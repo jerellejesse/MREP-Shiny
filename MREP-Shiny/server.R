@@ -6,6 +6,10 @@ library(tidyverse)
 library(DT)
 library(shinyjs)
 library(shinycssloaders)
+SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
+# At the top of your server function
+gs4_auth(path = "C:/Users/jjesse/Desktop/UMaine/MREP-Shiny/MREP-Shiny/mrep-shiny-c8ab17132080.json")
+
 server <- function(input, output, session) {
   # data
   inputs_year <- read.csv(here::here("MREP-Shiny/data/yearly_data.csv"))
@@ -578,4 +582,85 @@ selected_refs <- reactive({
       theme(legend.position="bottom")
   })
   
+  # Check if Google Sheets is properly authenticated
+  sheets_authorized <- reactive({
+    tryCatch({
+      token <- gs4_has_token()
+      if (!token) {
+        message("No valid Google Sheets token found")
+        return(FALSE)
+      }
+      return(TRUE)
+    }, error = function(e) {
+      message("Authorization error: ", e$message)
+      FALSE
+    })
+  })
+  
+  # Handle form submission
+  observeEvent(input$submit, {
+    # Validate required fields
+    if (is.null(input$name) || input$name == "") {
+      showNotification("Please enter your name", type = "error")
+      return()
+    }
+    
+    # Check if Google Sheets is authorized
+    if (!sheets_authorized()) {
+      showNotification("Google Sheets authentication failed. Please check your credentials.", 
+                       type = "error")
+      return()
+    }
+    
+    # Create new feedback entry
+    new_feedback <- data.frame(
+      timestamp = as.character(Sys.time()),
+      name = input$name,
+      email = input$email,
+      organization = input$organization,
+      role = input$role,
+      easy = input$easy,
+      relevant = input$relevant,
+      clear = input$clear,
+      improvements = input$improvements,
+      comments = input$comments,
+      stringsAsFactors = FALSE
+    )
+    
+    # Save to Google Sheets with proper error handling
+    tryCatch({
+      sheet_append(SHEET_ID, new_feedback)
+      
+      # Move success notification inside tryCatch
+      showNotification(
+        "Feedback saved successfully!",
+        type = "message"  # Changed from "success" to "message"
+      )
+      
+      # Show thank you message
+      output$thankyou <- renderUI({
+        div(class = "info-box",
+            h3("Thank You!"),
+            p("We appreciate your feedback. Your response has been recorded.")
+        )
+      })
+      
+      # Reset form
+      updateTextInput(session, "name", value = "")
+      updateTextInput(session, "email", value = "")
+      updateTextInput(session, "organization", value = "")
+      updateTextInput(session, "role", value = "")
+      updateTextInput(session, "easy", value = "")
+      updateTextInput(session, "relevant", value = "")
+      updateTextInput(session, "clear", value = "")
+      updateTextInput(session, "improvements", value = "")
+      updateTextAreaInput(session, "comments", value = "")
+      
+    }, error = function(e) {
+      showNotification(
+        "Failed to save feedback. Please try again.",
+        type = "error"
+      )
+    })
+  })
 }
