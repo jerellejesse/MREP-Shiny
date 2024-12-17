@@ -4,6 +4,27 @@ library(shinydashboard)
 library(shinycssloaders)
 library(shinyjs)
 library(ggplot2)
+library(bslib)
+library(googlesheets4)
+library(gargle)
+
+
+SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
+
+# tryCatch({
+#   # Try to authenticate using service account if credentials file exists
+#   if (file.exists("credentials.json")) {
+#     gs4_auth(path = "credentials.json")
+#   } else {
+#     # For interactive authentication during development
+#     gs4_auth()
+#   }
+#   
+#   # Verify the sheet exists and is accessible
+#   gs4_get(SHEET_ID)
+# }, error = function(e) {
+#   warning("Google Sheets authentication failed: ", e$message)
+# })
 
 # UI Definition
 ui <- dashboardPage(
@@ -15,7 +36,8 @@ ui <- dashboardPage(
       menuItem("Explore Current Assessment", tabName = "results", icon = icon("file-alt")),
       menuItem("Explore Impacts of Changes in Catch", tabName = "fisheryDependent", icon = icon("chart-bar")),
       menuItem("Explore Impacts of Changes in Indices", tabName = "fisheryIndependent", icon = icon("chart-line")),
-      menuItem("About", tabName = "about", icon = icon("info"))
+      menuItem("About", tabName = "about", icon = icon("info")),
+      menuItem("Feedback", tabName = "feedback", icon = icon("comment"))
     )
   ),
   dashboardBody(
@@ -641,8 +663,56 @@ ui <- dashboardPage(
                        
               )
          )
-       )
-
+       ),
+      tabItem(
+        tabName = "feedback",
+        div(class = "tab-content",
+            fluidRow(
+              column(
+                width = 4,
+                div(class = "info-box",
+                    h3("User Information"),
+                    div(class = "info-container",
+                        textInput("name", "Name", placeholder = "Enter your name"),
+                        textInput("email", "Email", placeholder = "Enter your email"),
+                        textInput("organization", "Organization", placeholder = "Your company/organization"),
+                        textInput("role", "Role/Position", placeholder = "Your role"),
+                        br(),
+                        actionButton("submit", "Submit Feedback", 
+                                     class = "btn-primary w-100")
+                    )
+                )
+              ),
+              column(
+                width = 8,
+                div(class = "info-box",
+                    h3("Please share your feedback with us"),
+                    div(class = "info-container",
+                        
+                        textInput("easy", "Is the tool easy to use and engaging? What could make it better?",
+                                  placeholder = ""),
+                        
+                        textInput("relevant", "Do the scenarios feel relevant to you?",
+                                  placeholder =" "),
+                        
+                        textInput("clear", "Are the visuals and explanations clear? If not, how can we improve them?",
+                                  placeholder = ""),
+                        
+                        textInput("improvements", "What features or improvements could make this tool more helpful for you?",
+                                  placeholder = ""),
+                        
+                        textAreaInput("comments", "Additional Comments",
+                                      rows = 5, 
+                                      placeholder = "Please share any additional thoughts...")
+                    )
+                ),
+                
+                # Thank you message
+                uiOutput("thankyou")
+          )
+        )
+      )
+    )
     )
   )
 )
