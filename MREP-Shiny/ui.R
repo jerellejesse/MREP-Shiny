@@ -19,7 +19,7 @@ SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
 #     # For interactive authentication during development
 #     gs4_auth()
 #   }
-#   
+# 
 #   # Verify the sheet exists and is accessible
 #   gs4_get(SHEET_ID)
 # }, error = function(e) {
