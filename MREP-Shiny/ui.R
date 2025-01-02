@@ -19,7 +19,7 @@ SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
 #     # For interactive authentication during development
 #     gs4_auth()
 #   }
-#   
+# 
 #   # Verify the sheet exists and is accessible
 #   gs4_get(SHEET_ID)
 # }, error = function(e) {
@@ -161,7 +161,7 @@ ui <- dashboardPage(
                                 tags$div(class = "info-box",
                                h3("Select Input Type"),
                                selectInput("inputType", "",
-                                           choices = c("Stock Index" = "index",
+                                           choices = c("Abundance Index" = "index",
                                                        "Catch" = "catch",
                                                        "Natural Mortality" = "mortality",
                                                        "Maturity" = "maturity",
@@ -326,7 +326,7 @@ ui <- dashboardPage(
                            column(width = 8,
                                   tags$div(class = "info-box",
                                       h3("Fishery Dependent Data Input Change"),
-                                      tags$p("This scenario compares the reported catch (green) to catch decreased by 50% (blue) to show the impact of catch on stock assessment results."),
+                                      uiOutput("dynamicCatchText"),
                                       br(),
                                       selectInput("dataSelection", 
                                                   "Select Input Change:",
