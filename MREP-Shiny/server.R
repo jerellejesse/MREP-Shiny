@@ -8,7 +8,7 @@ library(shinyjs)
 library(shinycssloaders)
 SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
 # At the top of your server function
-gs4_auth(path = "C:/Users/jerelle.jesse/OneDrive - University of Maine System/UMaine/MREP-Shiny/MREP-Shiny/mrep-shiny-c8ab17132080.json")
+gs4_auth(path = "mrep-shiny-c8ab17132080.json")
 
 server <- function(input, output, session) {
   # data
