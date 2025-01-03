@@ -100,18 +100,18 @@ th {
 }
 
 .nav-tabs > li > a {
-  font-size: 24px; /* Adjust this value as needed */
+  font-size: 16px; /* Adjust this value as needed */
 }
 
 
 /* Increase font size of sidebar menu items */
 .main-sidebar .sidebar-menu > li > a {
-  font-size: 24px; /* Adjust as needed */
+  font-size: 16px; /* Adjust as needed */
 }
 
 /* Increase font size of sidebar header */
 .main-sidebar .sidebar .sidebar-header {
-  font-size: 22px; /* Adjust as needed */
+  font-size: 16px; /* Adjust as needed */
 }
 
 /* Increase font size for the selectInput dropdown */
