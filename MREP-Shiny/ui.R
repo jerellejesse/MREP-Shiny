@@ -7,6 +7,7 @@ library(ggplot2)
 library(bslib)
 library(googlesheets4)
 library(gargle)
+library(DT)
 
 
 SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
