@@ -41,14 +41,14 @@
 }
 
 .info-box h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   color: #00608a;
   margin-top: 0;
 }
 
 .info-box p {
-  font-size: 16px;
+  font-size: 20px;
   color: #7f8c8d;
   margin: 0;
 }
@@ -100,34 +100,34 @@ th {
 }
 
 .nav-tabs > li > a {
-  font-size: 16px; /* Adjust this value as needed */
+  font-size: 24px; /* Adjust this value as needed */
 }
 
 
 /* Increase font size of sidebar menu items */
 .main-sidebar .sidebar-menu > li > a {
-  font-size: 16px; /* Adjust as needed */
+  font-size: 24px; /* Adjust as needed */
 }
 
 /* Increase font size of sidebar header */
 .main-sidebar .sidebar .sidebar-header {
-  font-size: 18px; /* Adjust as needed */
+  font-size: 22px; /* Adjust as needed */
 }
 
 /* Increase font size for the selectInput dropdown */
 .selectize-input,
 .selectize-dropdown,
 .selectize-dropdown-content {
-  font-size: 16px; /* Adjust this value as needed */
+  font-size: 20px; /* Adjust this value as needed */
 }
 
 /* Increase font size for the selectInput label */
 .selectize-input input {
-  font-size: 16px; /* Adjust this value as needed */
+  font-size: 20px; /* Adjust this value as needed */
 }
 
 /* Increase font size of checkbox group labels */
 .shiny-input-checkboxgroup label {
-  font-size: 16px; /* Adjust the size as needed */
+  font-size: 20px; /* Adjust the size as needed */
 }
 
