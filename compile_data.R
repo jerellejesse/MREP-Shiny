@@ -11,6 +11,7 @@ data <- readRDS(here::here("WHAM_runs/Base/Base.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasCatch/BiasCatch.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasCatch/HighCatch.rds"))
+base_retro <- readRDS(here::here('WHAM_runs/Base/Base_retro.rds'))
 
 #### Index
 n_sims <- 10
@@ -214,3 +215,11 @@ refs <- rbind(Fref, SSBref)
 rownames(refs)<-c("Fref", "SSBref")
 
 #write.csv(refs, here::here("MREP-Shiny/data/Ref_data.csv"))
+
+# Add an index column to tidy_df
+tidy_df <- Base_retro %>%
+  group_by(peel) %>%
+  mutate(index = row_number())%>%
+  mutate(year = 1980 + index - 1)
+write.csv(tidy_df, here::here("MREP-Shiny/data/Base_retro.csv"))
+

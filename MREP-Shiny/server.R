@@ -34,6 +34,7 @@ server <- function(input, output, session) {
   index_bias <- read.csv(here::here("MREP-Shiny/data/index_bias_data.csv"))
   refs <- read.csv(here::here("MREP-Shiny/data/Ref_data.csv"))
   catchability <- read.csv(here::here("MREP-Shiny/data/catchability.csv"))
+  base_retro <- read.csv(here::here("MREP-Shiny/data/Base_retro.csv"))
   
  
   input_data <- reactive({
@@ -514,9 +515,21 @@ server <- function(input, output, session) {
   })
   
   output$diagnosticsPlot <- renderPlot({
-    
+    ggplot(base_retro, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "SSB",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
   })
-  
+  output$diagnosticsPlotb <- renderPlot({
+    ggplot(base_retro, aes(x = year, y = F, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "F",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
+  }) 
   
   #### comparisons
   dynamicCatchText <- reactive({

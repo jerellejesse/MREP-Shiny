@@ -10,6 +10,7 @@ base <- readRDS(here::here("WHAM_runs/Base/Base.rds"))
 #bias <- readRDS(here::here("WHAM_runs/BiasCatch/BiasCatch.rds"))
 bias <- readRDS(here::here("WHAM_runs/BiasCatch/HighCatch.rds"))
 bias <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
+base_retro <- readRDS(here::here('WHAM_runs/Base/Base_retro.rds'))
 
 #### SSB plot ####
 
@@ -400,4 +401,28 @@ ggplot()+geom_line(aes(x=Year, y=SSBratio_base), color=gmri_cols("gmri green"), 
     geom_hline(aes(yintercept = 0), linetype="dashed")+
     labs(y="Relative Error in F")
   
+  
+  #### retro plots (just one simulation)
+  
+  # Add an index column to tidy_df
+  tidy_df <- Base_retro %>%
+    group_by(peel) %>%
+    mutate(index = row_number())%>%
+    mutate(year = 1980 + index - 1)
+  
+    # Plot SSB as lines for each peel
+  ggplot(tidy_df, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
+    geom_line(linewidth = 1) +
+    labs(x = "Year",
+         y = "SSB",
+         color = "Peel") +
+    theme_minimal()
+  
+  # Plot F as lines for each peel
+  ggplot(tidy_df, aes(x = year, y = F, color = factor(peel), group = peel)) +
+    geom_line(linewidth = 1) +
+    labs(x = "Year",
+         y = "F",
+         color = "Peel") +
+    theme_minimal()
   

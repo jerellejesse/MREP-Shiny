@@ -25,12 +25,12 @@ library(DataExplorer)
 
 run.osa <- FALSE # TRUE
 
-run.dir <- "WHAM_runs"
+run.dir <- getwd()
 run.name <- "WHAM_MT_Run4"
 
-dat.filename <- "2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT"
+#dat.filename <- "2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT"
 
-asap3 <- read_asap3_dat(file.path(run.dir,dat.filename))
+asap3 <- read_asap3_dat("2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT")
 
 nage <- asap3$dat$n_ages
 
