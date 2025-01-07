@@ -26,6 +26,7 @@ theme_set(custom_theme)
 
 server <- function(input, output, session) {
   # data
+
   inputs_year <- read.csv(here::here("data/yearly_data.csv"))
   inputs_age <- read.csv(here::here("data/input_age.csv"))
   weight_data <- read.csv(here::here("data/weight_data.csv"))
@@ -514,9 +515,21 @@ server <- function(input, output, session) {
   })
   
   output$diagnosticsPlot <- renderPlot({
-    
+    ggplot(base_retro, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "SSB",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
   })
-  
+  output$diagnosticsPlotb <- renderPlot({
+    ggplot(base_retro, aes(x = year, y = F, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "F",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
+  }) 
   
   #### comparisons
   dynamicCatchText <- reactive({

@@ -430,16 +430,26 @@ ui <- dashboardPage(
                   "Diagnostics help to assess the performance and fit of the stock assessment model."
                 )
               ),
-              tags$div(class = "info-box", h3("Diagnostics Plot"), plotOutput("diagnosticsPlot"))
+              tags$div(class = "info-box", h3("SSB Retrospective"), plotOutput("diagnosticsPlot"))
             ),
             column(width = 4, tags$div(
               class = "info-box",
-              h3("Interpretation"),
+              h3("Retrospective Analysis: Definition and Interpretation"),
               tags$p(
-                "Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis, fit statistics, and retrospective analysis."
+               tags$li("Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns.",
+                       style = "font-size: 20px; color: #7f8c8d")
+              ),
+              tags$p(
+                tags$li("For American Plaice there is not a strong retrospective pattern for SSB and F",
+                        style = "font-size: 20px; color: #7f8c8d")
               )
             ))
-          ))
+          ),
+          fluidRow(
+            column(
+              width = 8,
+              tags$div(class = "info-box", h3("Fishing Mortality Retrospective"), plotOutput("diagnosticsPlotb"))
+            )))
         )
       ),
       tabItem(
@@ -669,7 +679,7 @@ ui <- dashboardPage(
               class = "info-box",
               h3("Interpretation"),
               tags$p(
-                "Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis, fit statistics, and retrospective analysis."
+                "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
               )
             ))
           ))
@@ -903,7 +913,7 @@ ui <- dashboardPage(
               class = "info-box",
               h3("Intrepretation"),
               tags$p(
-                "Diagnostics involve analyzing the model's accuracy and reliability. Key aspects include residual analysis, fit statistics, and retrospective analysis"
+                "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
               )
             ))
           ))

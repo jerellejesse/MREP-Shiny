@@ -13,17 +13,20 @@ input <- readRDS(here::here("inputs/WHAM_MT_Run4_input.rds"))
 setwd(here::here("WHAM_runs/Base"))
 
 # fit model
-mod <- fit_wham(input, do.osa = F, do.retro = F, MakeADFun.silent = T)
+mod <- fit_wham(input, do.osa = F, do.retro = T, MakeADFun.silent = T)
 check_convergence(mod)
 mod_proj <- project_wham(model = mod)
-plot_wham_output(mod_proj, out.type = "pdf")
+#plot_wham_output(mod_proj, out.type = "pdf")
+
+# project retrospective 
+
 
 # function to simulate data from OM
 sim_fn <- function(om, self.fit = FALSE) {
   input <- om$input
   input$data <- om$simulate(complete = TRUE)
   if (self.fit) {
-    fit <- fit_wham(input, do.osa = F, do.retro = F, MakeADFun.silent = T)
+    fit <- fit_wham(input, do.osa = F, do.retro = T, MakeADFun.silent = T)
     return(fit)
   } else {
     return(input)
@@ -33,6 +36,8 @@ sim_fn <- function(om, self.fit = FALSE) {
 # simulate data
 set.seed(123)
 sim_inputs <- replicate(10, sim_fn(mod), simplify = F)
+
+#run EM and pull results
 res <- list(reps = list(), par.est = list(), par.se = list(), adrep.est = list(), adrep.se = list(), inputs = list())
 for (i in 1:length(sim_inputs)) {
   cat(paste0("i: ", i, "\n"))
@@ -46,7 +51,27 @@ for (i in 1:length(sim_inputs)) {
 }
 
 # save results
-saveRDS(res, file = "Base.rds")
+#saveRDS(res, file = "Base.rds")
+
+#save retro
+retro <- mod$peels
+library(dplyr)
+library(tidyr)
+
+# Flatten the list into a tidy data frame
+Base_retro <- purrr::map_dfr(seq_along(retro), function(i) {
+  sublist <- retro[[i]]
+  
+  tibble(
+    peel = i,                          # Sublist ID
+    SSB = sublist$rep$SSB,                           # `a` values (could be NULL)
+    F = c(sublist$rep$F, rep(NA, length(sublist$rep$SSB) - length(sublist$rep$F))) # Pad `b` with NA
+  )
+})
+
+
+
+#saveRDS(Base_retro, file = "Base_retro.rds")
 
 # #################################
 # #### Edit Catch Data ####
@@ -180,7 +205,7 @@ for (i in 1:length(sim_inputs)) {
 }
 
 # save results
-saveRDS(res, file = "HighCatch.rds")
+#saveRDS(res, file = "HighCatch.rds")
 
 
 ###########################
@@ -300,7 +325,7 @@ input$data$avg_years_ind <- (input$data$n_years_model - 5):(input$data$n_years_m
 ### Save input
 # Save model data input
 setwd(here::here())
-saveRDS(input, file = file.path("inputs", paste(run.name, "input_index.rds", sep = "_"))) #
+#saveRDS(input, file = file.path("inputs", paste(run.name, "input_index.rds", sep = "_"))) #
 
 
 #############################
@@ -332,4 +357,4 @@ for (i in 1:length(sim_inputs)) {
 }
 
 # save results
-saveRDS(res, file = "BiasIndex.rds")
+#saveRDS(res, file = "BiasIndex.rds")
