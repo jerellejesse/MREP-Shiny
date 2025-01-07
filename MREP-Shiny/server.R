@@ -35,7 +35,7 @@ server <- function(input, output, session) {
   index_bias <- read.csv(here::here("data/index_bias_data.csv"))
   refs <- read.csv(here::here("data/Ref_data.csv"))
   catchability <- read.csv(here::here("data/catchability.csv"))
-  
+  base_retro <- read.csv(here::here("data/Base_retro.csv"))
  
   input_data <- reactive({
     switch(
