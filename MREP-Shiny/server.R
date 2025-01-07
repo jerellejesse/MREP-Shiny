@@ -8,7 +8,7 @@ library(shinyjs)
 library(shinycssloaders)
 SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
 # At the top of your server function
-gs4_auth(path = "mrep-shiny-c8ab17132080.json")
+gs4_auth(path = "C:/Users/jerelle.jesse/OneDrive - University of Maine System/UMaine/MREP-Shiny/MREP-Shiny/mrep-shiny-c8ab17132080.json")
 
 # Define a custom theme with darker grid lines
 custom_theme <-  theme_minimal() +
@@ -27,14 +27,14 @@ theme_set(custom_theme)
 server <- function(input, output, session) {
   # data
 
-  inputs_year <- read.csv(here::here("data/yearly_data.csv"))
-  inputs_age <- read.csv(here::here("data/input_age.csv"))
-  weight_data <- read.csv(here::here("data/weight_data.csv"))
-  catch_bias <- read.csv(here::here("data/catch_bias_data.csv"))
-  high_catch <- read.csv(here::here("data/high_catch.csv"))
-  index_bias <- read.csv(here::here("data/index_bias_data.csv"))
-  refs <- read.csv(here::here("data/Ref_data.csv"))
-  catchability <- read.csv(here::here("data/catchability.csv"))
+  inputs_year <- read.csv(here::here("MREP-Shiny/data/yearly_data.csv"))
+  inputs_age <- read.csv(here::here("MREP-Shiny/data/input_age.csv"))
+  weight_data <- read.csv(here::here("MREP-Shiny/data/weight_data.csv"))
+  catch_bias <- read.csv(here::here("MREP-Shiny/data/catch_bias_data.csv"))
+  high_catch <- read.csv(here::here("MREP-Shiny/data/high_catch.csv"))
+  index_bias <- read.csv(here::here("MREP-Shiny/data/index_bias_data.csv"))
+  refs <- read.csv(here::here("MREP-Shiny/data/Ref_data.csv"))
+  catchability <- read.csv(here::here("MREP-Shiny/data/catchability.csv"))
   
  
   input_data <- reactive({
