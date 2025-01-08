@@ -8,7 +8,7 @@ library(shinyjs)
 library(shinycssloaders)
 SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
 # At the top of your server function
-gs4_auth(path = "mrep-shiny-c8ab17132080.json")
+gs4_auth(path = "C:/Users/jerelle.jesse/OneDrive - University of Maine System/UMaine/MREP-Shiny/MREP-Shiny/mrep-shiny-c8ab17132080.json")
 
 # Define a custom theme with darker grid lines
 custom_theme <-  theme_minimal() +
@@ -38,6 +38,7 @@ server <- function(input, output, session) {
   base_retro <- read.csv(here::here("data/Base_retro.csv"))
   bias_retro <- read.csv(here::here("data/BiasCatch_retro.csv"))
   highCatch_retro <- read.csv(here::here("data/HighCatch_retro.csv"))
+
  
   input_data <- reactive({
     switch(

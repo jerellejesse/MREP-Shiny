@@ -118,16 +118,18 @@ th {
 .selectize-input,
 .selectize-dropdown,
 .selectize-dropdown-content {
-  font-size: 20px; /* Adjust this value as needed */
+  font-size: 18px; /* Adjust this value as needed */
 }
 
 /* Increase font size for the selectInput label */
-.selectize-input input {
-  font-size: 20px; /* Adjust this value as needed */
+.select-input input {
+  font-size: 18px; /* Adjust this value as needed */
 }
 
 /* Increase font size of checkbox group labels */
 .shiny-input-checkboxgroup label {
-  font-size: 20px; /* Adjust the size as needed */
+  font-size: 16px; /* Adjust the size as needed */
 }
+
+
 
