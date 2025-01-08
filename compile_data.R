@@ -14,6 +14,7 @@ data <- readRDS(here::here("WHAM_runs/BiasCatch/HighCatch.rds"))
 base_retro <- readRDS(here::here('WHAM_runs/Base/Base_retro.rds'))
 bias_retro <- readRDS(here::here('WHAM_runs/BiasCatch/BiasCatch_retro.rds'))
 HighCatch_retro <- readRDS(here::here('WHAM_runs/BiasCatch/HighCatch_retro.rds'))
+BiasIndex_retro <-readRDS(here::here('WHAM_runs/BiasIndex/BiasIndex_retro.rds'))
 
 #### Index
 n_sims <- 10
@@ -227,12 +228,19 @@ write.csv(tidy_df, here::here("MREP-Shiny/data/Base_retro.csv"))
 
 tidy_df <- bias_retro %>%
   group_by(peel) %>%
-  mutate(index = row_number())%>%
+  dplyr::mutate(index = row_number())%>%
   mutate(year = 1980 + index - 1)
 write.csv(tidy_df, here::here("MREP-Shiny/data/BiasCatch_retro.csv"))
 
 tidy_df <- HighCatch_retro %>%
   group_by(peel) %>%
-  mutate(index = row_number())%>%
+  dplyr::mutate(index = row_number())%>%
   mutate(year = 1980 + index - 1)
 write.csv(tidy_df, here::here("MREP-Shiny/data/HighCatch_retro.csv"))
+
+tidy_df <- BiasIndex_retro %>%
+  group_by(peel) %>%
+  dplyr::mutate(index = row_number())%>%
+  mutate(year = 1980 + index - 1)
+write.csv(tidy_df, here::here("MREP-Shiny/data/BiasIndex_retro.csv"))
+

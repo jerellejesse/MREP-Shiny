@@ -353,10 +353,10 @@ input_bias <- readRDS(here::here("inputs/WHAM_MT_Run4_input_index.rds"))
 setwd(here::here("WHAM_runs/BiasIndex"))
 
 # fit model
-mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = F, MakeADFun.silent = T)
+mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = T, MakeADFun.silent = T)
 check_convergence(mod_bias)
 mod_proj <- project_wham(model = mod_bias)
-plot_wham_output(mod_proj, out.type = "pdf")
+#plot_wham_output(mod_proj, out.type = "pdf")
 
 # simulate data
 set.seed(123)
@@ -375,3 +375,19 @@ for (i in 1:length(sim_inputs)) {
 
 # save results
 #saveRDS(res, file = "BiasIndex.rds")
+
+#save retro
+retro <- mod_bias$peels
+
+# Flatten the list into a tidy data frame
+Base_retro <- purrr::map_dfr(seq_along(retro), function(i) {
+  sublist <- retro[[i]]
+  
+  tibble(
+    peel = i,                          # Sublist ID
+    SSB = sublist$rep$SSB,                           # `a` values (could be NULL)
+    F = c(sublist$rep$F, rep(NA, length(sublist$rep$SSB) - length(sublist$rep$F))) # Pad `b` with NA
+  )
+})
+
+#saveRDS(Base_retro, file = "BiasIndex_retro.rds")

@@ -26,21 +26,20 @@ theme_set(custom_theme)
 
 server <- function(input, output, session) {
   # data
+  inputs_year <- read.csv(here::here("MREP-Shiny/data/yearly_data.csv"))
+  inputs_age <- read.csv(here::here("MREP-Shiny/data/input_age.csv"))
+  weight_data <- read.csv(here::here("MREP-Shiny/data/weight_data.csv"))
+  catch_bias <- read.csv(here::here("MREP-Shiny/data/catch_bias_data.csv"))
+  high_catch <- read.csv(here::here("MREP-Shiny/data/high_catch.csv"))
+  index_bias <- read.csv(here::here("MREP-Shiny/data/index_bias_data.csv"))
+  refs <- read.csv(here::here("MREP-Shiny/data/Ref_data.csv"))
+  catchability <- read.csv(here::here("MREP-Shiny/data/catchability.csv"))
+  base_retro <- read.csv(here::here("MREP-Shiny/data/Base_retro.csv"))
+  bias_retro <- read.csv(here::here("MREP-Shiny/data/BiasCatch_retro.csv"))
+  highCatch_retro <- read.csv(here::here("MREP-Shiny/data/HighCatch_retro.csv"))
+  index_retro <- read.csv(here::here("MREP-Shiny/data/BiasIndex_retro.csv"))
 
-  inputs_year <- read.csv(here::here("data/yearly_data.csv"))
-  inputs_age <- read.csv(here::here("data/input_age.csv"))
-  weight_data <- read.csv(here::here("data/weight_data.csv"))
-  catch_bias <- read.csv(here::here("data/catch_bias_data.csv"))
-  high_catch <- read.csv(here::here("data/high_catch.csv"))
-  index_bias <- read.csv(here::here("data/index_bias_data.csv"))
-  refs <- read.csv(here::here("data/Ref_data.csv"))
-  catchability <- read.csv(here::here("data/catchability.csv"))
-  base_retro <- read.csv(here::here("data/Base_retro.csv"))
-  bias_retro <- read.csv(here::here("data/BiasCatch_retro.csv"))
-  highCatch_retro <- read.csv(here::here("data/HighCatch_retro.csv"))
-
- 
-  input_data <- reactive({
+    input_data <- reactive({
     switch(
       input$inputType,
       "index" = data.frame(
@@ -548,7 +547,40 @@ server <- function(input, output, session) {
            color = "Peel")+
       scale_color_gmri(palette = "main")
   })
- 
+  
+  output$diagnosticsPlot2b <- renderPlot({
+    selected_data <- selected_catch()
+    if (input$dataSelection == "low"){
+      retro_data <-bias_retro
+    }else {
+      retro_data <-highCatch_retro
+    }
+    ggplot(retro_data, aes(x = year, y = F, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "F",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
+  })
+  
+  output$diagnosticsPlot3 <- renderPlot({
+    ggplot(index_retro, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "SSB",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
+  })
+  output$diagnosticsPlot3b <- renderPlot({
+    ggplot(index_retro, aes(x = year, y = F, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "F",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
+  }) 
+  
+  
   #### comparisons
   dynamicCatchText <- reactive({
     if (input$dataSelection == "low") {
