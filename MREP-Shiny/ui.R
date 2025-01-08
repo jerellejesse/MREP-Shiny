@@ -672,7 +672,7 @@ ui <- dashboardPage(
               ),
               div(
                 class = "info-box",
-                h3("Diagnostics Plot"),
+                h3("SSB Retrospective"),
                 plotOutput("diagnosticsPlot2")
               )
             ), column(width = 4, div(
@@ -682,7 +682,12 @@ ui <- dashboardPage(
                 "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
               )
             ))
-          ))
+          ),
+          fluidRow(
+          column(
+            width = 8,
+            tags$div(class = "info-box", h3("Fishing Mortality Retrospective"), plotOutput("diagnosticsPlot2b"))
+          )))
         )
       ),
       tabItem(
@@ -905,7 +910,7 @@ ui <- dashboardPage(
               ),
               tags$div(
                 class = "info-box",
-                h3("Diagnostics Plot"),
+                h3("SSB Retrospective"),
                 plotOutput("diagnosticsPlot3")
               )
             ),
@@ -916,6 +921,12 @@ ui <- dashboardPage(
                 "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
               )
             ))
+          ),
+          fluidRow(
+            column(
+              width = 8,
+              tags$div(class = "info-box", h3("Fishing Mortality Retrospective"), plotOutput("diagnosticsPlot3b"))
+            )
           ))
         )
       ),
