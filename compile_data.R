@@ -243,3 +243,4 @@ tidy_df <- BiasIndex_retro %>%
   dplyr::mutate(index = row_number())%>%
   mutate(year = 1980 + index - 1)
 write.csv(tidy_df, here::here("MREP-Shiny/data/BiasIndex_retro.csv"))
+

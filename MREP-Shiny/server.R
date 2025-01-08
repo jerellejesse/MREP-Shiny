@@ -26,7 +26,6 @@ theme_set(custom_theme)
 
 server <- function(input, output, session) {
   # data
-
   inputs_year <- read.csv(here::here("MREP-Shiny/data/yearly_data.csv"))
   inputs_age <- read.csv(here::here("MREP-Shiny/data/input_age.csv"))
   weight_data <- read.csv(here::here("MREP-Shiny/data/weight_data.csv"))

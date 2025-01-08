@@ -62,8 +62,8 @@ Base_retro <- purrr::map_dfr(seq_along(retro), function(i) {
   
   tibble(
     peel = i,                          # Sublist ID
-    SSB = sublist$rep$SSB,                           # `a` values (could be NULL)
-    F = c(sublist$rep$F, rep(NA, length(sublist$rep$SSB) - length(sublist$rep$F))) # Pad `b` with NA
+    SSB = sublist$rep$SSB,                           
+    F = c(sublist$rep$F, rep(NA, length(sublist$rep$SSB) - length(sublist$rep$F))) 
   )
 })
 
@@ -76,7 +76,9 @@ Base_retro <- purrr::map_dfr(seq_along(retro), function(i) {
 # 
 # asap3 <- read_asap3_dat(here("inputs/2022_AMP_MT_ASAP_WHAM_MODEL_INPUT_REVISED_WAA_FINAL.DAT"))
 # # change catch
-# catch_em <- asap3$dat$CAA_mats[[1]]*0.5 #divide the whole matrix in half, not paa, but actual catchaa
+# #catch_em <- asap3$dat$CAA_mats[[1]]*0.5 #divide the whole matrix in half, not paa, but actual catchaa
+# catch_em <- asap3$dat$CAA_mats[[1]]*2 #double matrix, not paa, but actual catchaa
+# 
 # asap3$dat$CAA_mats[[1]]<- catch_em
 # 
 # nage <- asap3$dat$n_ages
@@ -169,7 +171,9 @@ Base_retro <- purrr::map_dfr(seq_along(retro), function(i) {
 # 
 # ### Save input
 # # Save model data input
-# saveRDS(input, file=file.path("inputs", paste(run.name, "input_high_catch.rds", sep='_')) )#
+# saveRDS(input, file=file.path("inputs", paste(run.name, "input_bias.rds", sep='_')) )# low catch bias
+# 
+# saveRDS(input, file=file.path("inputs", paste(run.name, "input_high_catch.rds", sep='_')) )# high catch bias
 
 #############################
 #### Bias Catch Scenario ####
@@ -180,10 +184,10 @@ input_bias <- readRDS(here("inputs/WHAM_MT_Run4_input_high_catch.rds"))
 setwd(here("WHAM_runs/BiasCatch"))
 
 # fit model
-mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = F, MakeADFun.silent = T)
+mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = T, MakeADFun.silent = T)
 check_convergence(mod_bias)
 mod_proj <- project_wham(model = mod_bias)
-plot_wham_output(mod_proj, out.type = "pdf")
+#plot_wham_output(mod_proj, out.type = "pdf")
 
 # simulate data
 set.seed(123)
@@ -212,12 +216,14 @@ Base_retro <- purrr::map_dfr(seq_along(retro), function(i) {
   
   tibble(
     peel = i,                          # Sublist ID
-    SSB = sublist$rep$SSB,                           # `a` values (could be NULL)
-    F = c(sublist$rep$F, rep(NA, length(sublist$rep$SSB) - length(sublist$rep$F))) # Pad `b` with NA
+    SSB = sublist$rep$SSB,                           
+    F = c(sublist$rep$F, rep(NA, length(sublist$rep$SSB) - length(sublist$rep$F))) 
   )
 })
 
-#saveRDS(Base_retro, file = "Base_retro.rds")
+#saveRDS(Base_retro, file = "BiasCatch_retro.rds")
+#saveRDS(Base_retro, file = "HighCatch_retro.rds")
+
 
 ###########################
 #### Modify index data ####
