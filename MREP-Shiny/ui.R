@@ -1048,7 +1048,7 @@ ui <- dashboardPage(
             
             tags$div(
               style = "font-size: 18px;",
-              textInput("relevant", "Do the scenarios feel relevant to you?", placeholder =
+              textInput("relevant", "Do the scenarios feel relevant to you? Are there additional scenarios you would like to see?", placeholder =
                           " ", width="100%")
             ),
             
