@@ -36,6 +36,8 @@ server <- function(input, output, session) {
   refs <- read.csv(here::here("data/Ref_data.csv"))
   catchability <- read.csv(here::here("data/catchability.csv"))
   base_retro <- read.csv(here::here("data/Base_retro.csv"))
+  bias_retro <- read.csv(here::here("data/BiasCatch_retro.csv"))
+  highCatch_retro <- read.csv(here::here("data/HighCatch_retro.csv"))
  
   input_data <- reactive({
     switch(
@@ -531,6 +533,21 @@ server <- function(input, output, session) {
       scale_color_gmri(palette = "main")
   }) 
   
+  output$diagnosticsPlot2 <- renderPlot({
+    selected_data <- selected_catch()
+    if (input$dataSelection == "low"){
+      retro_data <-bias_retro
+    }else {
+      retro_data <-highCatch_retro
+    }
+    ggplot(retro_data, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
+      geom_line(linewidth = 1) +
+      labs(x = "Year",
+           y = "SSB",
+           color = "Peel")+
+      scale_color_gmri(palette = "main")
+  })
+ 
   #### comparisons
   dynamicCatchText <- reactive({
     if (input$dataSelection == "low") {
