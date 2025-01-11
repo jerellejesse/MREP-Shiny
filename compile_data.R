@@ -7,7 +7,7 @@ library(here)
 library(Rmisc)
 library(gmRi)
 
-data <- readRDS(here::here("WHAM_runs/Base/Base.rds"))
+data <- readRDS(here::here("WHAM_runs/Base/Base2.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasCatch/BiasCatch.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasIndex/BiasIndex.rds"))
 data <- readRDS(here::here("WHAM_runs/BiasCatch/HighCatch.rds"))
@@ -17,7 +17,7 @@ HighCatch_retro <- readRDS(here::here('WHAM_runs/BiasCatch/HighCatch_retro.rds')
 BiasIndex_retro <-readRDS(here::here('WHAM_runs/BiasIndex/BiasIndex_retro.rds'))
 
 #### Index
-n_sims <- 10
+n_sims <- 50
 n_years <- 42
 n_indices <-4
 indices <- matrix(NA,  n_sims,n_years)
@@ -48,7 +48,7 @@ cols <- length(catch_transpose)
 catch_metric <- matrix(NA, 42,3)
 
 for (i in 1:cols) {
-  temp <- CI(catch_transpose[,i], ci=0.95)
+  temp <- CI(na.omit(catch_transpose[,i]), ci=0.95)
   catch_metric [i,] <- temp
 }
 catch_metric_data<-as.data.frame(catch_metric)%>%
@@ -65,7 +65,7 @@ cols <- length(pull_ssb_transpose)
 SSB <- matrix(NA, 42,3)
 
 for (i in 1:cols) {
-  temp <- CI(pull_ssb_transpose[,i], ci=0.95)
+  temp <- CI(na.omit(pull_ssb_transpose[,i]), ci=0.95)
   SSB [i,] <- temp
 }
 SSB_data<-as.data.frame(SSB)%>%
@@ -82,7 +82,7 @@ cols <- length(pull_f_transpose)
 F <- matrix(NA, 42,3)
 
 for (i in 1:cols) {
-  temp <- CI(pull_f_transpose[,i], ci=0.95)
+  temp <- CI(na.omit(pull_f_transpose[,i]), ci=0.95)
   F [i,] <- temp
 }
 F_data<-as.data.frame(F) %>% dplyr::rename(F_upper=V1, F=V2, F_lower=V3)
@@ -98,7 +98,7 @@ cols <- length(pull_r_transpose)
 R <- matrix(NA, 42,3)
 
 for (i in 1:cols) {
-  temp <- CI(pull_r_transpose[,i], ci=0.95)
+  temp <- CI(na.omit(pull_r_transpose[,i]), ci=0.95)
   R [i,] <- temp
 }
 R_data<-as.data.frame(R)%>% dplyr::rename(R_upper=V1, R=V2, R_lower=V3)
@@ -108,7 +108,7 @@ R_data$year <- 1980:2021
 #### Data by year ####
 dfs <- list(index_mean,catch_metric_data, SSB_data, F_data, R_data)
 input_year <- Reduce(function(x,y) full_join(x,y, by="year"), dfs)
-#write.csv(input_year, here::here("MREP-Shiny/data/yearly_data.csv"))
+#write.csv(input_year, here::here("MREP-Shiny/data/yearly_data2.csv"))
 
 # catch bias
 dfs <- list(catch_metric_data, SSB_data, F_data, R_data)
@@ -144,7 +144,7 @@ WAA_tidy <- gather(WAA,"Age", "Weight",1:11 )%>%
   select(!junk)%>%
   mutate(Age=fct_relevel(Age,"1","2","3","4","5","6","7","8","9","10","11"))
 
-#write.csv(WAA_tidy, here::here("MREP-Shiny/data/weight_data.csv"))
+#write.csv(WAA_tidy, here::here("MREP-Shiny/data/weight_data2.csv"))
 
 #### Maturity 
 Mat <- data$inputs[[1]]$data$mature[1,]%>%
@@ -175,11 +175,11 @@ tidy_cat<- tidy_cat <- tidy_cat %>%
   mutate(survey = str_replace(survey, "V", "Index"))
   # separate(tidy_cat, survey,c("junk", "Survey"), sep="(?<=[A-Za-z])(?=[0-9])")%>%
   # select(!junk)
-#write.csv(tidy_cat, here::here("MREP-Shiny/data/catchability.csv"))
+#write.csv(tidy_cat, here::here("MREP-Shiny/data/catchability2.csv"))
 
 dfs <-list(Mat, MAA_mean, Sel)
 input_age <- Reduce(function(x,y) full_join(x,y, by="Age"), dfs)
-#write.csv(input_age, here::here("MREP-Shiny/data/input_age.csv"))
+#write.csv(input_age, here::here("MREP-Shiny/data/input_age2.csv"))
 
 #### Reference points
 F40 <- list()

@@ -40,7 +40,7 @@ ui <- dashboardPage(
         icon = icon("fish")
       ),
       menuItem(
-        "Explore Current Assessment",
+        "Explore Assessment Results",
         tabName = "results",
         icon = icon("file-alt")
       ),
@@ -368,7 +368,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "These include target (solid grey line) and threshold (dashed grey line) values.",
+                      "These include target (solid black line) and threshold (dashed black line) values.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   ) ,
@@ -516,7 +516,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When catch is decreased by 50% the biomass estimate is also decreased by 50%",
+                      "When catch is changed by 50% the biomass estimate is also changes by 50%",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -543,13 +543,13 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When catch is decreased by 50% the fishing mortality rate does not change.",
+                      "When catch is changes by 50% the fishing mortality rate does not change.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   ),
                   tags$p(
                     tags$li(
-                      "This occurs becasue the proportion of fish being removed is still the same since biomass also decreased by 50%.",
+                      "This occurs becasue the proportion of fish being removed is still the same since biomass also changed by 50%.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -575,7 +575,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When catch is decreased by 50% the recruitment also decreases by 50%.",
+                      "When catch is changed by 50% the recruitment also changes by 50%.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -599,13 +599,13 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "The biomass thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line).",
+                      "The biomass thresholds are depicted for regular catch (solid black line) and changed catch (dashed black line).",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   ) ,
                   tags$p(
                     tags$li(
-                      "When catch is decreased by 50% the reference point also decreases and the stock status remains the same.",
+                      "When catch is changed by 50% the reference point also changes and the stock status remains the same.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -627,13 +627,13 @@ ui <- dashboardPage(
                   ) ,
                   tags$p(
                     tags$li(
-                      "The fishing mortaliy thresholds are depicted for regular catch (solid grey line) and decreased catch (dashed grey line).",
+                      "The fishing mortaliy thresholds are depicted for regular catch (solid black line) and changed catch (dashed black line).",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   ),
                   tags$p(
                     tags$li(
-                      "When catch is decreased by 50% the reference point remains the same.",
+                      "When catch is changed by 50% the reference point remains the same.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -677,7 +677,7 @@ ui <- dashboardPage(
               )
             ), column(width = 4, div(
               class = "info-box",
-              h3("Interpretation"),
+              h3("Retrospective Analysis: Definition and Interpretation"),
               tags$p(
                 "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
               )
@@ -837,7 +837,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "The biomass thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line).",
+                      "The biomass thresholds are depicted for regular indices (solid black line) and decreased indices (dashed black line).",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   ) ,
@@ -865,7 +865,7 @@ ui <- dashboardPage(
                   ) ,
                   tags$p(
                     tags$li(
-                      "The fishing mortaliy thresholds are depicted for regular indices (solid grey line) and decreased indices (dashed grey line).",
+                      "The fishing mortaliy thresholds are depicted for regular indices (solid black line) and decreased indices (dashed black line).",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   ),
@@ -916,7 +916,7 @@ ui <- dashboardPage(
             ),
             column(width = 4, tags$div(
               class = "info-box",
-              h3("Intrepretation"),
+              h3("Retrospective Analysis: Definition and Intrepretation"),
               tags$p(
                 "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
               )
