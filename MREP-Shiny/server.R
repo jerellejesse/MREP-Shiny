@@ -6,6 +6,8 @@ library(tidyverse)
 library(DT)
 library(shinyjs)
 library(shinycssloaders)
+library(rlang)
+
 SHEET_ID <- "19f3SOqC12goVIdomD-AR3R2as0icae3JQKTD0-_QjdE"
 # At the top of your server function
 gs4_auth(path = "mrep-shiny-c8ab17132080.json")
@@ -100,7 +102,7 @@ server <- function(input, output, session) {
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
-          "At sea monitoring (e.g. Fisheries Observer Program) is primarily ised to estimate discarded commercial catch.",
+          "At sea monitoring (e.g. Fisheries Observer Program) is primarily used to estimate discarded commercial catch.",
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
@@ -599,10 +601,12 @@ server <- function(input, output, session) {
   output$comparisonPlot <- renderPlot({
     selected_data <- selected_catch()
     # Dynamic colors
-    bias_color <- if (input$dataSelection == "low") {
-      "#407331"  # Blue for lower catch
+     if (input$dataSelection == "low") {
+     bias_color <- "#407331"  # Blue for lower catch
+     bias_label <- "Lower Catch"
     } else {
-      "#EA4F12"  # orange for higher catch
+      bias_color<- "#EA4F12"  # orange for higher catch
+      bias_label <- "Higher Catch"
     }
     
     ggplot() +
@@ -660,9 +664,12 @@ server <- function(input, output, session) {
         fill = "",
         linetype = ""
       ) + # fills out the legend
-      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"))  +
+      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                         labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                        labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"),
+                            labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label))  +
       ylim(0, 40000)
     
   })
@@ -723,98 +730,102 @@ server <- function(input, output, session) {
       expand_limits(y = 0) +
       labs(y = "Indices (kg/tow)", x = "Year")
   })
-  output$comparisonPlot3 <- renderPlot({
-    base_colors <- c("#407331", "#407331", "#00608a", "#00608a")
-    
-    base_linetypes <- c("solid", "dashed", "solid", "dashed")
-    
-    bias_colors <- c("#ABB400", "#ABB400", "#00736D", "#00736D")
-    
-    bias_linetypes <- c("solid", "dashed", "solid", "dashed")
-    
-    # Create an empty ggplot object
-    p <- ggplot() +
-      expand_limits(y = 0) +
-      labs(y = "Indices (kg/tow)", x = "Year") +
-      theme_minimal() +
-      theme(text = element_text(size = 20))
-    
-    if ("base" %in% input$indexSelection) {
+
+    output$comparisonPlot3 <- renderPlot({
+      # Initialize the plot
+      p <- ggplot() +
+        expand_limits(y = 0) +
+        labs(y = "Indices (kg/tow)", x = "Year", color = "Index", linetype = "Index") +
+        theme_minimal() +
+        theme(text = element_text(size = 20))
+      
+      # Add base indices if selected
+      if ("base" %in% input$indexSelection) {
+        p <- p +
+          geom_line(
+            data = inputs_year,
+            aes(x = year, y = V1, color = "Base Index 1", linetype = "Base Index 1"),
+            linewidth = 1
+          ) +
+          geom_line(
+            data = inputs_year,
+            aes(x = year, y = V2, color = "Base Index 2", linetype = "Base Index 2"),
+            linewidth = 1
+          ) +
+          geom_line(
+            data = inputs_year,
+            aes(x = year, y = V3, color = "Base Index 3", linetype = "Base Index 3"),
+            linewidth = 1
+          ) +
+          geom_line(
+            data = inputs_year,
+            aes(x = year, y = V4, color = "Base Index 4", linetype = "Base Index 4"),
+            linewidth = 1
+          )
+      }
+      
+      # Add bias indices if selected
+      if ("bias" %in% input$indexSelection) {
+        p <- p +
+          geom_line(
+            data = index_bias,
+            aes(x = year, y = V1, color = "Lower Index 1", linetype = "Lower Index 1"),
+            linewidth = 1
+          ) +
+          geom_line(
+            data = index_bias,
+            aes(x = year, y = V2, color = "Lower Index 2", linetype = "Lower Index 2"),
+            linewidth = 1
+          ) +
+          geom_line(
+            data = index_bias,
+            aes(x = year, y = V3, color = "Lower Index 3", linetype = "Lower Index 3"),
+            linewidth = 1
+          ) +
+          geom_line(
+            data = index_bias,
+            aes(x = year, y = V4, color = "Lower Index 4", linetype = "Lower Index 4"),
+            linewidth = 1
+          )
+      }
+      
+      # Define combined color and linetype scales
       p <- p +
-        geom_line(
-          data = inputs_year,
-          aes(x = year, y = V1),
-          color = "#407331",
-          linewidth = 1
+        scale_color_manual(
+          values = c(
+            "Base Index 1" = "#407331", "Base Index 2" = "#407331",
+            "Base Index 3" = "#00608a", "Base Index 4" = "#00608a",
+            "Lower Index 1" = "#ABB400", "Lower Index 2" = "#ABB400",
+            "Lower Index 3" = "#EA4F12", "Lower Index 4" = "#EA4F12"
+          )
         ) +
-        geom_line(
-          data = inputs_year,
-          aes(x = year, y = V2),
-          color = "#407331",
-          linewidth = 1,
-          linetype = "dashed"
-        ) +
-        geom_line(
-          data = inputs_year,
-          aes(x = year, y = V3),
-          color = "#00608a",
-          linewidth = 1
-        ) +
-        geom_line(
-          data = inputs_year,
-          aes(x = year, y = V4),
-          color = "#00608a",
-          linewidth = 1,
-          linetype = "dashed"
+        scale_linetype_manual(
+          values = c(
+            "Base Index 1" = "solid", "Base Index 2" = "dashed",
+            "Base Index 3" = "solid", "Base Index 4" = "dashed",
+            "Lower Index 1" = "solid", "Lower Index 2" = "dashed",
+            "Lower Index 3" = "solid", "Lower Index 4" = "dashed"
+          )
         )
-    }
+      
+      p
+    })
     
-    if ("bias" %in% input$indexSelection) {
-      p <- p +
-        geom_line(
-          data = index_bias,
-          aes(x = year, y = V1),
-          color = "#ABB400",
-          linewidth = 1
-        ) +
-        geom_line(
-          data = index_bias,
-          aes(x = year, y = V2),
-          color = "#ABB400",
-          linewidth = 1,
-          linetype = "dashed"
-        ) +
-        geom_line(
-          data = index_bias,
-          aes(x = year, y = V3),
-          color = "#EA4F12",
-          linewidth = 1
-        ) +
-        geom_line(
-          data = index_bias,
-          aes(x = year, y = V4),
-          color = "#EA4F12",
-          linewidth = 1,
-          linetype = "dashed"
-        )
-    }
-    # ggplot() +
-    #   geom_line(data = selected_index, aes(x = year, y = V1), linewidth = 1) +
-    #   geom_line(data = bias_index, aes(x = year, y = V1), linewidth = 1) +
-    #   expand_limits(y = 0) +
-    #   labs( y = "Indices (kg/tow)", x = "Year") +
-    #   theme_minimal()+
-    #   theme(text = element_text(size = 16))
-    p
-  })
-  
+
   output$dataTable2 <- renderDataTable({
     selected_data <- selected_catch()
+    bias_catch_label <- ifelse(input$dataSelection =="low", "Lower Catch", "Higher Catch")
+
+    # Create the data frame
     df <- data.frame(
       Year = inputs_year$year,
-      "Base Catch" = round(inputs_year$catch,2),
-      "Bias Catch" = round(selected_data$catch,2)
+      `Base Catch` = round(inputs_year$catch, 2)
     )
+    
+    # Add the dynamic column
+    df[[bias_catch_label]] <- round(selected_data$catch, 2)
+    
+    df
   }, options = list(
     pageLength = 42,
     initComplete = JS(
@@ -851,10 +862,12 @@ server <- function(input, output, session) {
   output$biomassPlot2 <- renderPlot({
     selected_data <- selected_catch()
     # Dynamic colors
-    bias_color <- if (input$dataSelection == "low") {
-      "#407331"  # Blue for lower catch
+    if (input$dataSelection == "low") {
+      bias_color <- "#407331"  # Blue for lower catch
+      bias_label <- "Lower Catch"
     } else {
-      "#EA4F12"  # orange for higher catch
+      bias_color<- "#EA4F12"  # orange for higher catch
+      bias_label <- "Higher Catch"
     }
     ggplot() + geom_line(
       data = inputs_year,
@@ -911,18 +924,23 @@ server <- function(input, output, session) {
         fill = "",
         linetype = ""
       ) +
-      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"))
+      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                         labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                        labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"),
+                            labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label))
   })
   
   output$fishingMortalityPlot2 <- renderPlot({
     selected_data <- selected_catch()
     # Dynamic colors
-    bias_color <- if (input$dataSelection == "low") {
-      "#407331"  # Blue for lower catch
+     if (input$dataSelection == "low") {
+      bias_color <-"#407331"  # Blue for lower catch
+      bias_label <- "Lower Catch"
     } else {
-      "#EA4F12"  # orange for higher catch
+      bias_color <-"#EA4F12"  # orange for higher catch
+      bias_label <-"Higher Catch"
     }
     ggplot() + geom_line(
       data = inputs_year,
@@ -979,18 +997,23 @@ server <- function(input, output, session) {
         fill = "",
         linetype = ""
       ) +
-      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"))
+      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                         labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                        labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"),
+                            labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label))
   })
   
   output$recruitmentPlot2 <- renderPlot({
     selected_data <- selected_catch()
     # Dynamic colors
-    bias_color <- if (input$dataSelection == "low") {
-      "#407331"  # Blue for lower catch
+     if (input$dataSelection == "low") {
+      bias_color <-"#407331"  # Blue for lower catch
+      bias_label <- "Lower Catch"
     } else {
-      "#EA4F12"  # orange for higher catch
+      bias_color <-"#EA4F12"  # orange for higher catch
+      bias_label <- "Higher Catch"
     }
     ggplot() + geom_line(
       data = inputs_year,
@@ -1047,9 +1070,12 @@ server <- function(input, output, session) {
         fill = "",
         linetype = ""
       ) +
-      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"))
+      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                         labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                        labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"),
+                            labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label))
   })
   
   output$biomassPlot3 <- renderPlot({
@@ -1081,8 +1107,8 @@ server <- function(input, output, session) {
         aes(
           x = year,
           y = SSB,
-          color = "Bias Index",
-          linetype = "Bias Index"
+          color = "Lower Index",
+          linetype = "Lower Index"
         ),
         linewidth = 1
       ) +
@@ -1092,9 +1118,9 @@ server <- function(input, output, session) {
           x = year,
           ymin = SSB_lower,
           ymax = SSB_upper,
-          fill = "Bias Index",
-          color = "Bias Index",
-          linetype = "Bias Index"
+          fill = "Lower Index",
+          color = "Lower Index",
+          linetype = "Lower Index"
         ) ,
         alpha = 0.5,
         linewidth = 0.75
@@ -1102,13 +1128,13 @@ server <- function(input, output, session) {
       expand_limits(y = 0) +
       scale_color_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
       scale_fill_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
-      scale_linetype_manual(values = c("Base Index" = "solid", "Bias Index" = "dashed")) +
+      scale_linetype_manual(values = c("Base Index" = "solid", "Lower Index" = "dashed")) +
       labs(
         title = "",
         x = "Year",
@@ -1147,8 +1173,8 @@ server <- function(input, output, session) {
         aes(
           x = year,
           y = F,
-          color = "Bias Index",
-          linetype = "Bias Index"
+          color = "Lower Index",
+          linetype = "Lower Index"
         ),
         linewidth = 1
       ) +
@@ -1158,22 +1184,22 @@ server <- function(input, output, session) {
           x = year,
           ymin = F_lower,
           ymax = F_upper,
-          fill = "Bias Index",
-          color = "Bias Index",
-          linetype = "Bias Index"
+          fill = "Lower Index",
+          color = "Lower Index",
+          linetype = "Lower Index"
         ) ,
         alpha = 0.5,
         linewidth = 0.75
       ) +
       scale_color_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
       scale_fill_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
-      scale_linetype_manual(values = c("Base Index" = "solid", "Bias Index" = "dashed")) +
+      scale_linetype_manual(values = c("Base Index" = "solid", "Lower Index" = "dashed")) +
       labs(
         title = "",
         x = "Year",
@@ -1213,8 +1239,8 @@ server <- function(input, output, session) {
         aes(
           x = year,
           y = R,
-          color = "Bias Index",
-          linetype = "Bias Index"
+          color = "Lower Index",
+          linetype = "Lower Index"
         ),
         linewidth = 1
       ) +
@@ -1224,9 +1250,9 @@ server <- function(input, output, session) {
           x = year,
           ymin = R_lower,
           ymax = R_upper,
-          fill = "Bias Index",
-          color = "Bias Index",
-          linetype = "Bias Index"
+          fill = "Lower Index",
+          color = "Lower Index",
+          linetype = "Lower Index"
         ) ,
         alpha = 0.5,
         linewidth = 0.75
@@ -1234,13 +1260,13 @@ server <- function(input, output, session) {
       expand_limits(y = 0) +
       scale_color_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
       scale_fill_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
-      scale_linetype_manual(values = c("Base Index" = "solid", "Bias Index" = "dashed")) +
+      scale_linetype_manual(values = c("Base Index" = "solid", "Lower Index" = "dashed")) +
       labs(
         title = "",
         x = "Year",
@@ -1255,10 +1281,12 @@ server <- function(input, output, session) {
     selected_data <- selected_catch()
     selected_rps <- selected_refs()
     # Dynamic colors
-    bias_color <- if (input$dataSelection == "low") {
-      "#407331"  # Blue for lower catch
+     if (input$dataSelection == "low") {
+      bias_color <-"#407331"  # Blue for lower catch
+      bias_label <- "Lower Catch"
     } else {
-      "#EA4F12"  # orange for higher catch
+      bias_color <-"#EA4F12"  # orange for higher catch
+      bias_label <- "Higher Catch"
     }
     ggplot() + geom_line(
       data = inputs_year,
@@ -1317,13 +1345,16 @@ server <- function(input, output, session) {
         linewidth = 1,
         linetype = "dashed"
       ) +
-      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed")) +
+      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                         labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                        labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"),
+                            labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
       labs(
         title = "",
         x = "Year",
-        y = "Biomass",
+        y = "Biomass (mt)",
         color = "",
         fill = "",
         linetype = ""
@@ -1336,10 +1367,12 @@ server <- function(input, output, session) {
     selected_data <- selected_catch()
     selected_rps <- selected_refs()
     # Dynamic colors
-    bias_color <- if (input$dataSelection == "low") {
-      "#407331"  # Blue for lower catch
+   if (input$dataSelection == "low") {
+      bias_color <-  "#407331"  # Blue for lower catch
+      bias_label <- "Lower Catch"
     } else {
-      "#EA4F12"  # orange for higher catch
+      bias_color <- "#EA4F12"  # orange for higher catch
+      bias_label <- "Higher Catch"
     }
     ggplot() + geom_line(
       data = inputs_year,
@@ -1399,9 +1432,12 @@ server <- function(input, output, session) {
         linetype = "dashed"
       ) +
       expand_limits(y = 0) +
-      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color)) +
-      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed")) +
+      scale_color_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                         labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_fill_manual(values = c("Base Catch" = "#00608a", "Bias Catch" = bias_color),
+                        labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
+      scale_linetype_manual(values = c("Base Catch" = "solid", "Bias Catch" = "dashed"),
+                            labels= c("Base Catch"= "Base Catch", "Bias Catch"= bias_label)) +
       labs(
         title = "",
         x = "Year",
@@ -1446,8 +1482,8 @@ server <- function(input, output, session) {
         aes(
           x = year,
           y = SSB,
-          color = "Bias Index",
-          linetype = "Bias Index"
+          color = "Lower Index",
+          linetype = "Lower Index"
         ),
         linewidth = 1
       ) +
@@ -1457,9 +1493,9 @@ server <- function(input, output, session) {
           x = year,
           ymin = SSB_lower,
           ymax = SSB_upper,
-          fill = "Bias Index",
-          color = "Bias Index",
-          linetype = "Bias Index"
+          fill = "Lower Index",
+          color = "Lower Index",
+          linetype = "Lower Index"
         ) ,
         alpha = 0.5,
         linewidth = 0.75
@@ -1473,13 +1509,13 @@ server <- function(input, output, session) {
       expand_limits(y = 0) +
       scale_color_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
       scale_fill_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
-      scale_linetype_manual(values = c("Base Index" = "solid", "Bias Index" = "dashed")) +
+      scale_linetype_manual(values = c("Base Index" = "solid", "Lower Index" = "dashed")) +
       labs(
         title = "",
         x = "Year",
@@ -1526,8 +1562,8 @@ server <- function(input, output, session) {
         aes(
           x = year,
           y = F,
-          color = "Bias Index",
-          linetype = "Bias Index"
+          color = "Lower Index",
+          linetype = "Lower Index"
         ),
         linewidth = 1
       ) +
@@ -1537,9 +1573,9 @@ server <- function(input, output, session) {
           x = year,
           ymin = F_lower,
           ymax = F_upper,
-          fill = "Bias Index",
-          color = "Bias Index",
-          linetype = "Bias Index"
+          fill = "Lower Index",
+          color = "Lower Index",
+          linetype = "Lower Index"
         ) ,
         alpha = 0.5,
         linewidth = 0.75
@@ -1552,17 +1588,17 @@ server <- function(input, output, session) {
       ) +
       scale_color_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
       scale_fill_manual(values = c(
         "Base Index" = "#00608a",
-        "Bias Index" = "#407331"
+        "Lower Index" = "#407331"
       )) +
-      scale_linetype_manual(values = c("Base Index" = "solid", "Bias Index" = "dashed")) +
+      scale_linetype_manual(values = c("Base Index" = "solid", "Lower Index" = "dashed")) +
       labs(
         title = "",
         x = "Year",
-        y = "Biomass (mt)",
+        y = "Fishing Mortality",
         color = "",
         fill = "",
         linetype = ""

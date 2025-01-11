@@ -8,25 +8,23 @@ library(wham)
 ###################
 
 # pull saved data input from Run 4 WHAM plaice assessment
-input <- readRDS(here::here("inputs/WHAM_MT_Run4_input.rds"))
+inputs <- readRDS(here::here("inputs/WHAM_MT_Run4_input.rds"))
 
 setwd(here::here("WHAM_runs/Base"))
 
 # fit model
-mod <- fit_wham(input, do.osa = F, do.retro = T, MakeADFun.silent = T)
+mod <- fit_wham(inputs, do.osa = F, do.retro = F, MakeADFun.silent = T)
 check_convergence(mod)
-mod_proj <- project_wham(model = mod)
-#plot_wham_output(mod_proj, out.type = "pdf")
-
-# project retrospective 
+#mod_proj <- project_wham(model = mod)
+plot_wham_output(mod, out.type = "pdf")
 
 
 # function to simulate data from OM
 sim_fn <- function(om, self.fit = FALSE) {
   input <- om$input
-  input$data <- om$simulate(complete = TRUE)
+  input$data <- om$simulate(complete = TRUE) # something weird with simulate? Not replicating AMP..simulating over wrong set of years?
   if (self.fit) {
-    fit <- fit_wham(input, do.osa = F, do.retro = T, MakeADFun.silent = T)
+    fit <- fit_wham(input, do.osa = F, do.retro = F, MakeADFun.silent = T)
     return(fit)
   } else {
     return(input)
@@ -35,7 +33,7 @@ sim_fn <- function(om, self.fit = FALSE) {
 
 # simulate data
 set.seed(123)
-sim_inputs <- replicate(10, sim_fn(mod), simplify = F)
+sim_inputs <- replicate(50, sim_fn(mod), simplify = F)
 
 #run EM and pull results
 res <- list(reps = list(), par.est = list(), par.se = list(), adrep.est = list(), adrep.se = list(), inputs = list())
@@ -50,9 +48,14 @@ for (i in 1:length(sim_inputs)) {
   res$inputs[[i]] <- as.list(tfit$input, "Inputs")
 }
 
+
 # save results
 #saveRDS(res, file = "Base.rds")
+saveRDS(res, file = "Base2.rds")
 
+# Rerun with do.retro=T
+mod <- fit_wham(input, do.osa = F, do.retro = T, MakeADFun.silent = T)
+check_convergence(mod)
 #save retro
 retro <- mod$peels
 
@@ -180,8 +183,8 @@ Base_retro <- purrr::map_dfr(seq_along(retro), function(i) {
 #############################
 # read in biased input
 #input_bias <- readRDS(here("inputs/WHAM_MT_Run4_input_bias.rds"))
-input_bias <- readRDS(here("inputs/WHAM_MT_Run4_input_high_catch.rds"))
-setwd(here("WHAM_runs/BiasCatch"))
+input_bias <- readRDS(here::here(("inputs/WHAM_MT_Run4_input_high_catch.rds")))
+setwd(here::here("WHAM_runs/BiasCatch"))
 
 # fit model
 mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = T, MakeADFun.silent = T)
@@ -353,7 +356,7 @@ input_bias <- readRDS(here::here("inputs/WHAM_MT_Run4_input_index.rds"))
 setwd(here::here("WHAM_runs/BiasIndex"))
 
 # fit model
-mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = T, MakeADFun.silent = T)
+mod_bias <- fit_wham(input_bias, do.osa = F, do.retro = F, MakeADFun.silent = T)
 check_convergence(mod_bias)
 mod_proj <- project_wham(model = mod_bias)
 #plot_wham_output(mod_proj, out.type = "pdf")
@@ -375,6 +378,7 @@ for (i in 1:length(sim_inputs)) {
 
 # save results
 #saveRDS(res, file = "BiasIndex.rds")
+saveRDS(res, file = "BiasIndex2.rds")
 
 #save retro
 retro <- mod_bias$peels
