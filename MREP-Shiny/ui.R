@@ -179,7 +179,7 @@ ui <- dashboardPage(
                 br(),
                 h3("Fishery"),
                 tags$p(
-                  "American Plaice commercial landings totaled 1.5 million pounds in 2022, valued at $2.5 million. They are typically harvested using trawl nets and not commonly encounterd in the recreational fishery.",
+                  "American Plaice commercial landings totaled 1.5 million pounds in 2022, valued at $2.5 million. They are typically harvested using trawl nets and not commonly encountered in the recreational fishery.",
                   style = "color: #6c757d; margin-top: 20px; font-size: 18px;"
                 ),
                 br(),
@@ -344,7 +344,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "For American Plaice recrtuiment has been variable without a trend throughout the time series.",
+                      "For American Plaice recruitment has been variable without a trend throughout the time series.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -368,13 +368,13 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "These include target (solid black line) and threshold (dashed black line) values.",
+                      "These include a threshold (solid black line) that is a cuutoff where there may be negative repercussions for the stock.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   ) ,
                   tags$p(
                     tags$li(
-                      "For American Plaice biomass has stayed above the threshold (not overfished) and above the target in more recent decades.",
+                      "For American Plaice biomass was below the threshold (overfished) for a few years then increased above it (not overfished).",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -394,7 +394,7 @@ ui <- dashboardPage(
                 ) ,
                 tags$p(
                   tags$li(
-                    "For American Plaice F was over the threshold (overfishing) for the beginning of the time series then below the threshold (not overfishing) after the mid-1990s and for the remainder of the time series.",
+                    "For American Plaice F was over the threshold (overfishing) for the beginning of the time series then below the threshold (not overfishing) for the remainder of the time series.",
                     style = "font-size: 20px; color: #7f8c8d"
                   )
                 )
@@ -463,7 +463,12 @@ ui <- dashboardPage(
               tags$div(
                 class = "info-box",
                 h3("Fishery Dependent Data Input Change"),
-                uiOutput("dynamicCatchText"),
+                tags$p(
+                  tags$li("Catch is a critical input to stock assessments, making it essential to understand how it is utilized within the assessment process and how any changes can influence the results and subsequent management decisions.",
+                          style = "font-size: 20px; color: #7f8c8d")
+                  ),
+                br(),
+               uiOutput("dynamicCatchText"),
                 br(),
                 selectInput(
                   "dataSelection",
@@ -516,7 +521,13 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When catch is changed by 50% the biomass estimate is also changes by 50%",
+                      "When catch is changed by 50% the biomass estimate is also changes by 50%.",
+                      style = "font-size: 20px; color: #7f8c8d"
+                    )
+                  ),
+                  tags$p(
+                    tags$li(
+                      "This occurs becasue the assessment model assumes the biomass changes to achieve the new catch.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -549,7 +560,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "This occurs becasue the proportion of fish being removed is still the same since biomass also changed by 50%.",
+                      "This occurs becasue the proportion of fish being removed is still the same since both the biomass and catch changed.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -576,6 +587,12 @@ ui <- dashboardPage(
                   tags$p(
                     tags$li(
                       "When catch is changed by 50% the recruitment also changes by 50%.",
+                      style = "font-size: 20px; color: #7f8c8d"
+                    )
+                  ),
+                  tags$p(
+                    tags$li(
+                      "This occurs because the assessment model assumes the recruitment changes to achieve the new catch.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -679,7 +696,12 @@ ui <- dashboardPage(
               class = "info-box",
               h3("Retrospective Analysis: Definition and Interpretation"),
               tags$p(
-                "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
+                tags$li("Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns.",
+                        style = "font-size: 20px; color: #7f8c8d")
+              ),
+              tags$p(
+                tags$li("For American Plaice, there is not a strong retrospective pattern for SSB or F.",
+                        style = "font-size: 20px; color: #7f8c8d")
               )
             ))
           ),
@@ -702,9 +724,14 @@ ui <- dashboardPage(
                 class = "info-box",
                 h3("Fishery Independent Data Input Change"),
                 tags$p(
-                  "This scenario compares the base indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results.",
-                  style = "font-size: 20px;"
+                  tags$li("Indices of abundance are critical inputs to stock assessments, making it essential to understand how they are utilized within the assessment process and how any changes can influence the results and subsequent management decisions.",
+                          style = "font-size: 20px; color: #7f8c8d")
                 ),
+                br(),
+                tags$p(
+                  tags$li("This scenario compares the base indices (blue and green) to indices decreased by 50% (orange and yellow) to show the impact of indices on stock assessment results.",
+                  style = "font-size: 20px;color: #7f8c8d"
+                )),
                 br(),
                 
                 checkboxGroupInput(
@@ -760,7 +787,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When indices are decreased by 50% the biomass estimate remains similar.",
+                      "When indices are decreased by 50% the biomass estimate remains similar, but increased slightly.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -787,7 +814,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When indices are decreased by 50% the fishing mortality rate remains similar.",
+                      "When indices are decreased by 50% the fishing mortality rate remains similar, but decreased slightly.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -813,7 +840,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When indices are decreased by 50% the recruitment remains similar.",
+                      "When indices are decreased by 50% the recruitment remains similar, but increased slightly.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -843,7 +870,7 @@ ui <- dashboardPage(
                   ) ,
                   tags$p(
                     tags$li(
-                      "When indices are decreased by 50% the reference point and stock status are similar.",
+                      "When indices are decreased by 50% the reference point and stock status are similar, but increased slightly.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -871,7 +898,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "When indices are decreased by 50% the reference point and stock status are similar",
+                      "When indices are decreased by 50% the reference point and stock status are similar, but decreased slightly",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -918,8 +945,13 @@ ui <- dashboardPage(
               class = "info-box",
               h3("Retrospective Analysis: Definition and Intrepretation"),
               tags$p(
-                "Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns."
-              )
+                tags$li("Retrospective analysis is a common diagnostic for stock assessment models. It entails removing years of data and reanalysing the results to look for any patterns.",
+                        style = "font-size: 20px; color: #7f8c8d"
+              )),
+              tags$p(
+                tags$li("For American Plaice, there is not a strong retrospective pattern for SSB or F.",
+                        style = "font-size: 20px; color: #7f8c8d"
+                ))
             ))
           ),
           fluidRow(
