@@ -94,7 +94,7 @@ server <- function(input, output, session) {
       
       catch = tagList(tags$ul(
         tags$li(
-          "Total catch for a stock includes commercial and recreational landings and discards.",
+          "Total catch for a stock includes fishery removals from commercial and recreational landings and discards.",
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
@@ -106,11 +106,11 @@ server <- function(input, output, session) {
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
-          "Recreational data is collected through the MRIP program which uses a combination of angler intercept surveys and mail-based surveys to characterize catch.",
+          "Recreational data is collected through the Marine Recreational Information Program (MRIP) program which uses a combination of angler intercept surveys and mail-based surveys to characterize catch.",
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
-          "For American Plaice, catch inludes only commercial landings and discards becasue they are not encountered in the recreational fishery.",
+          "For American Plaice, catch inludes only commercial landings and discards becasue they do not have a recreational fishery.",
           style = "font-size: 20px; color: #7f8c8d"
         )
       )),
@@ -137,7 +137,11 @@ server <- function(input, output, session) {
         tags$li(
           "This data comes from fishery independent surveys that take biological information.",
           style = "font-size: 20px; color: #7f8c8d"
-        )
+        ),
+        tags$li(
+          "For American Plaice, maturity follows a curve with most fish reaching maturity by age 6.",
+          style = "font-size: 20px; color: #7f8c8d"
+      )
       )),
       weight = tagList(tags$ul(
         tags$li(
@@ -147,6 +151,10 @@ server <- function(input, output, session) {
         tags$li(
           "There can be different weight-at-age for fishery indpendent data and fishery dependent data",
           style = "font-size: 20px; color: #7f8c8d"
+        ),
+        tags$li(
+          "For American Plaice, average weight increases with age up to age 11.",
+          style = "font-size: 20px; color: #7f8c8d"
         )
       )),
       catchability = tagList(tags$ul(
@@ -155,7 +163,11 @@ server <- function(input, output, session) {
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
-          "This can be estimated in the stock assessment model. Each index has an associated catchability.",
+          "This can be estimated in the stock assessment model.Each index has an associated catchability.",
+          style = "font-size: 20px; color: #7f8c8d"
+        ),
+        tags$li(
+          "Each index has an associated catchability.",
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
@@ -171,7 +183,7 @@ server <- function(input, output, session) {
       )),
       selectivity = tagList(tags$ul(
         tags$li(
-          "Selectivity data shows how the fishing gear affects different age groups of the fish stock.",
+          "Selectivity data shows the probability a certain age fish will be caught in fishing gear.",
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
@@ -180,6 +192,10 @@ server <- function(input, output, session) {
         ),
         tags$li(
           "Selectivity can be different for different time periods.",
+          style = "font-size: 20px; color: #7f8c8d"
+        ),
+        tags$li(
+          "For American Plaice, selectivity follows a curve with a high probability of fish age 6+ being caught.",
           style = "font-size: 20px; color: #7f8c8d"
         )
         
@@ -489,16 +505,17 @@ server <- function(input, output, session) {
       geom_hline(
         yintercept = refs$base[2],
         color = "black",
-        linewidth = 1
-      ) +
-      geom_hline(
-        yintercept = refs$base[2] / 2,
-        color = "black",
         linewidth = 1,
-        linetype = "dashed"
+        linetype="solid"
       ) +
+      # geom_hline(
+      #   yintercept = refs$base[2] / 2,
+      #   color = "black",
+      #   linewidth = 1,
+      #   linetype = "solid"
+      # ) +
       expand_limits(y = 0) +
-      labs(x = "Year", y = "Biomass (mt)")
+      labs(x = "Year", y = "Spawning Stock Biomass (mt)")
   })
   
   output$fishingMortalityReferencePlot <- renderPlot({
@@ -522,7 +539,7 @@ server <- function(input, output, session) {
     ggplot(base_retro, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
       geom_line(linewidth = 1) +
       labs(x = "Year",
-           y = "SSB",
+           y = "Spawning Stock Biomass (mt)",
            color = "Peel")+
       scale_color_gmri(palette = "main")
   })
@@ -530,7 +547,7 @@ server <- function(input, output, session) {
     ggplot(base_retro, aes(x = year, y = F, color = factor(peel), group = peel)) +
       geom_line(linewidth = 1) +
       labs(x = "Year",
-           y = "F",
+           y = "Fishing Mortality",
            color = "Peel")+
       scale_color_gmri(palette = "main")
   }) 
@@ -545,7 +562,7 @@ server <- function(input, output, session) {
     ggplot(retro_data, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
       geom_line(linewidth = 1) +
       labs(x = "Year",
-           y = "SSB",
+           y = "Spawning Stock Biomass (mt)",
            color = "Peel")+
       scale_color_gmri(palette = "main")
   })
@@ -560,7 +577,7 @@ server <- function(input, output, session) {
     ggplot(retro_data, aes(x = year, y = F, color = factor(peel), group = peel)) +
       geom_line(linewidth = 1) +
       labs(x = "Year",
-           y = "F",
+           y = "Fishing Mortality",
            color = "Peel")+
       scale_color_gmri(palette = "main")
   })
@@ -569,7 +586,7 @@ server <- function(input, output, session) {
     ggplot(index_retro, aes(x = year, y = SSB, color = factor(peel), group = peel)) +
       geom_line(linewidth = 1) +
       labs(x = "Year",
-           y = "SSB",
+           y = "Spawning Stock Biomass (mt)",
            color = "Peel")+
       scale_color_gmri(palette = "main")
   })
@@ -577,7 +594,7 @@ server <- function(input, output, session) {
     ggplot(index_retro, aes(x = year, y = F, color = factor(peel), group = peel)) +
       geom_line(linewidth = 1) +
       labs(x = "Year",
-           y = "F",
+           y = "Fishing Mortality",
            color = "Peel")+
       scale_color_gmri(palette = "main")
   }) 
@@ -594,7 +611,7 @@ server <- function(input, output, session) {
   
   # Render the text dynamically
   output$dynamicCatchText <- renderUI({
-    tags$p(dynamicCatchText(), style = "font-size: 20px;")
+    tags$p(tags$li(dynamicCatchText(), style = "font-size: 20px; color: #7f8c8d;"))
   })
   
   
@@ -735,9 +752,7 @@ server <- function(input, output, session) {
       # Initialize the plot
       p <- ggplot() +
         expand_limits(y = 0) +
-        labs(y = "Indices (kg/tow)", x = "Year", color = "Index", linetype = "Index") +
-        theme_minimal() +
-        theme(text = element_text(size = 20))
+        labs(y = "Indices (kg/tow)", x = "Year", color = "Index", linetype = "Index") 
       
       # Add base indices if selected
       if ("base" %in% input$indexSelection) {
@@ -1354,7 +1369,7 @@ server <- function(input, output, session) {
       labs(
         title = "",
         x = "Year",
-        y = "Biomass (mt)",
+        y = "Spawning Stock Biomass (mt)",
         color = "",
         fill = "",
         linetype = ""
@@ -1519,7 +1534,7 @@ server <- function(input, output, session) {
       labs(
         title = "",
         x = "Year",
-        y = "Biomass (mt)",
+        y = "Spawning Stock Biomass (mt)",
         color = "",
         fill = "",
         linetype = ""
