@@ -527,7 +527,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "This occurs becasue the assessment model assumes the biomass changes to achieve the new catch.",
+                      "This occurs because the assessment model assumes the biomass changes to achieve the new catch.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )
@@ -560,7 +560,7 @@ ui <- dashboardPage(
                   ),
                   tags$p(
                     tags$li(
-                      "This occurs becasue the proportion of fish being removed is still the same since both the biomass and catch changed.",
+                      "This occurs because the proportion of fish being removed is still the same since both the biomass and catch changed.",
                       style = "font-size: 20px; color: #7f8c8d"
                     )
                   )

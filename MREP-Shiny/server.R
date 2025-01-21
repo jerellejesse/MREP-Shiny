@@ -110,7 +110,7 @@ server <- function(input, output, session) {
           style = "font-size: 20px; color: #7f8c8d"
         ),
         tags$li(
-          "For American Plaice, catch inludes only commercial landings and discards becasue they do not have a recreational fishery.",
+          "For American Plaice, catch inludes only commercial landings and discards because they do not have a recreational fishery.",
           style = "font-size: 20px; color: #7f8c8d"
         )
       )),
