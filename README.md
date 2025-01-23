@@ -34,5 +34,5 @@ This interactive Shiny application helps users explore data inputs and stock ass
 
 For questions, feedback, or collaboration inquiries, please reach out:
 
-**[Jerelle Jesse]**\
+**Jerelle Jesse**\
 📧 [jerelle.jesse\@maine.edu](mailto:your.email@example.com)
